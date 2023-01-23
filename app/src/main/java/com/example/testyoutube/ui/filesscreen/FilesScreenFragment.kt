@@ -1,4 +1,4 @@
-package com.example.testyoutube.ui.youtubescreen
+package com.example.testyoutube.ui.filesscreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.testyoutube.R
+import com.example.testyoutube.databinding.FragmentFilesScreenBinding
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
 
-class YoutubeScreenFragment : Fragment() {
-    private var _binding: FragmentYoutubeScreenBinding? = null
+class FilesScreenFragment : Fragment() {
+
+    private var _binding: FragmentFilesScreenBinding? = null
     private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,23 +24,20 @@ class YoutubeScreenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentYoutubeScreenBinding.inflate(inflater, container, false)
+        _binding = FragmentFilesScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.bottomBar.active = 1
+        binding.bottomBar.active = 2
         setOnMenuClickListener()
     }
 
     private fun setOnMenuClickListener() {
-        binding.bottomBar.files.setOnClickListener {
-            findNavController().navigate(
-                YoutubeScreenFragmentDirections.actionYoutubeScreenFragmentToFilesScreenFragment()
-            )
+        binding.bottomBar.music.setOnClickListener {
+            findNavController().navigateUp()
         }
-
     }
 
     override fun onDestroyView() {

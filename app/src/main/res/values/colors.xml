@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="appbar">#7C8EBB</color>
     <color name="scrback">#1A1B1E</color>
+    <color name="text_title_color">#EAF0FF</color>
 </resources>

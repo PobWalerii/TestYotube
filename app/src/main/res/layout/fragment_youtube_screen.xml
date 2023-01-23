@@ -7,11 +7,12 @@
     android:background="@color/scrback"
     tools:context=".ui.youtubescreen.YoutubeScreenFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
-        android:alpha="0.5"
+        android:orientation="horizontal"
+        android:alpha="0.2"
         android:background="@color/appbar"
         android:backgroundTint="@color/appbar"
         android:backgroundTintMode="src_atop"
@@ -19,63 +20,142 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/appbar"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/titleForChannels"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="@dimen/title_margin_start"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Топ-10 Українськи пісні"
+        android:textColor="@color/text_title_color"
+        android:textSize="@dimen/text_title_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerChannels"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_recyclerChannels"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleForChannels"/>
+
+    <TextView
+        android:id="@+id/titleForContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/title_margin_start"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="Топ-100 Українськи пісні"
+        android:textColor="@color/text_title_color"
+        android:textSize="@dimen/text_title_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerChannels" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/mini_player"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleForContent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mini_player"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_mini_player"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
 
-        <Button
-            android:id="@+id/music"
-            style="@android:style/Widget.Toolbar.Button.Navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/button_margin"
-            android:drawableTop="@drawable/music"
-            android:drawableTint="@color/appbar"
-            android:linksClickable="true"
-            android:text="@string/music"
-            android:textAllCaps="false"
-            android:textColor="@color/appbar"
-            android:textSize="@dimen/button_text_size"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/mini_image_size"
+            android:layout_height="match_parent"
+            android:src="@drawable/music"
+            android:padding="@dimen/mini_image_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:targetApi="m" />
+            tools:ignore="ContentDescription" />
 
-        <Button
-            android:id="@+id/files"
-            style="@android:style/Widget.Toolbar.Button.Navigation"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/button_margin"
-            android:drawableTop="@drawable/files"
-            android:drawableTint="@color/white"
-            android:text="@string/files"
-            android:textAllCaps="false"
-            android:textSize="@dimen/button_text_size"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/music"
+            android:text="Название один"
+            android:layout_margin="@dimen/mini_player_text_margin"
+            android:textColor="@color/text_title_color"
+            app:layout_constraintEnd_toStartOf="@+id/image_prev"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Имя автора"
+            android:layout_margin="@dimen/mini_player_text_margin"
+            android:textColor="@color/appbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_prev"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <ImageView
+            android:id="@+id/image_next"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:src="@drawable/skip_next"
+            android:layout_marginEnd="@dimen/mini_button_margin_end"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/music"
-            tools:ignore="UnusedAttribute" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_stop"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:src="@drawable/pause"
+            android:layout_marginEnd="@dimen/mini_button_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/image_next"
+            app:layout_constraintEnd_toEndOf="@+id/image_next"
+            app:layout_constraintTop_toTopOf="@+id/image_next"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_prev"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:src="@drawable/skip_previous"
+            android:layout_marginEnd="@dimen/mini_button_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/image_stop"
+            app:layout_constraintEnd_toEndOf="@+id/image_stop"
+            app:layout_constraintTop_toTopOf="@+id/image_stop"
+            tools:ignore="ContentDescription" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/bottom_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

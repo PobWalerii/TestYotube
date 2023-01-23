@@ -9,5 +9,14 @@
         android:id="@+id/youtubeScreenFragment"
         android:name="com.example.testyoutube.ui.youtubescreen.YoutubeScreenFragment"
         android:label="fragment_youtube_screen"
-        tools:layout="@layout/fragment_youtube_screen" />
+        tools:layout="@layout/fragment_youtube_screen" >
+        <action
+            android:id="@+id/action_youtubeScreenFragment_to_filesScreenFragment"
+            app:destination="@id/filesScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filesScreenFragment"
+        android:name="com.example.testyoutube.ui.filesscreen.FilesScreenFragment"
+        android:label="fragment_files_screen"
+        tools:layout="@layout/fragment_files_screen" />
 </navigation>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="active"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/music"
+            style="@android:style/Widget.Toolbar.Button.Navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/button_margin"
+            android:drawableTop="@drawable/music"
+            android:linksClickable="true"
+            android:text="@string/music"
+            android:textAllCaps="false"
+            android:textSize="@dimen/button_text_size"
+            app:setButtonColor="@{active == 1}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute" />
+<!--            android:drawableTint="@color/appbar"-->
+        <Button
+            android:id="@+id/files"
+            style="@android:style/Widget.Toolbar.Button.Navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/button_margin"
+            android:drawableTop="@drawable/files"
+            android:text="@string/files"
+            android:textAllCaps="false"
+            app:setButtonColor="@{active == 2}"
+            android:textSize="@dimen/button_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/music"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/music"
+            tools:ignore="UnusedAttribute" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
