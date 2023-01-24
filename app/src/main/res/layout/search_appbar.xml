@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/app_bar_height"
+    android:background="@color/appbar">
+
+    <EditText
+        android:id="@+id/textSearch"
+        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/app_bar_text_margin_start"
+        android:layout_marginTop="@dimen/app_bar_text_margin_top"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textColor="@color/text_title_color"
+        android:textSize="@dimen/text_search_size"
+        app:layout_constraintEnd_toStartOf="@+id/search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/search"
+        style="@android:style/Widget.Toolbar.Button.Navigation"
+        android:layout_width="@dimen/app_bar_button_search_width"
+        android:layout_height="@dimen/app_bar_button_search_height"
+        android:layout_marginTop="@dimen/app_bar_button_search_margin_top"
+        android:layout_marginEnd="@dimen/app_bar_button_search_margin_end"
+        android:drawableTop="@drawable/search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/border_search"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/app_bar_border_margin_start"
+        android:layout_marginTop="@dimen/app_bar_border_margin_top"
+        android:layout_marginEnd="@dimen/app_bar_border_margin_end"
+        android:layout_marginBottom="@dimen/app_bar_border_margin_bottom"
+        android:alpha="0.4"
+        android:src="@drawable/border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

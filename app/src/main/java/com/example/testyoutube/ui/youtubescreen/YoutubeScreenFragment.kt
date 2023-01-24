@@ -1,13 +1,17 @@
 package com.example.testyoutube.ui.youtubescreen
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.testyoutube.R
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
+import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
+
 
 class YoutubeScreenFragment : Fragment() {
     private var _binding: FragmentYoutubeScreenBinding? = null
@@ -29,6 +33,17 @@ class YoutubeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.bottomBar.active = 1
         setOnMenuClickListener()
+        setOnSearchClickListener()
+    }
+
+    private fun setOnSearchClickListener() {
+        binding.appBarLayout.search.setOnClickListener {
+            val textView = binding.appBarLayout.textSearch
+            val keyWord = textView.text.toString()
+            if (keyWord.isNotEmpty()) {
+                hideKeyboardFromView(textView.context, textView)
+            }
+        }
     }
 
     private fun setOnMenuClickListener() {
@@ -37,7 +52,6 @@ class YoutubeScreenFragment : Fragment() {
                 YoutubeScreenFragmentDirections.actionYoutubeScreenFragmentToFilesScreenFragment()
             )
         }
-
     }
 
     override fun onDestroyView() {

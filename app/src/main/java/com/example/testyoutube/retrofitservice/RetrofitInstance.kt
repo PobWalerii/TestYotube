@@ -1,6 +1,6 @@
 package com.example.testgiphy.retrofitservice
 
-import com.example.testyoutube.constants.KeyConstants.BASE_URL
+import com.example.testyoutube.utils.KeyConstants.BASE_URL
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

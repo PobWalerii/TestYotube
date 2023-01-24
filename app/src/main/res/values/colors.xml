@@ -7,7 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="appbar">#7C8EBB</color>
+    <color name="appbar">#2E333D</color>
+    <color name="active_button">#7C8EBB</color>
     <color name="scrback">#1A1B1E</color>
-    <color name="text_title_color">#EAF0FF</color>
+    <color name="text_title_color">#BEC2CA</color>
 </resources>

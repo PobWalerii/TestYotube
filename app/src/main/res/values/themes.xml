@@ -16,11 +16,9 @@
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
 
         <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/music</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splashe</item>
         <item name="postSplashScreenTheme">@style/Theme.TestYoutube</item>
 
     </style>
-    <style name="MyBottom" parent="Widget.Material3.BottomAppBar">
-        <item name="android:background">@color/scrback</item>
-    </style>
+
 </resources>

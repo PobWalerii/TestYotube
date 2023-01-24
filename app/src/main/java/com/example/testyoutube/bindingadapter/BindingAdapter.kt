@@ -36,7 +36,7 @@ object BindingAdapter {
     fun setButtonColor(view: Button, active: Boolean) {
         val color = ContextCompat.getColor(view.context,
             if(active) {
-                R.color.appbar
+                R.color.active_button
             } else {
                 R.color.text_title_color
             })

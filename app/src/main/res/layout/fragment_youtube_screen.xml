@@ -7,20 +7,12 @@
     android:background="@color/scrback"
     tools:context=".ui.youtubescreen.YoutubeScreenFragment">
 
-    <LinearLayout
+    <include
         android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:orientation="horizontal"
-        android:alpha="0.2"
-        android:background="@color/appbar"
-        android:backgroundTint="@color/appbar"
-        android:backgroundTintMode="src_atop"
+        layout="@layout/search_appbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/titleForChannels"
@@ -78,6 +70,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ImageView
+            android:id="@+id/border_player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/mini_player_border_margin"
+            android:alpha="0.5"
+            android:src="@drawable/border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_prev"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -131,7 +135,7 @@
             android:src="@drawable/pause"
             android:layout_marginEnd="@dimen/mini_button_margin"
             app:layout_constraintBottom_toBottomOf="@+id/image_next"
-            app:layout_constraintEnd_toEndOf="@+id/image_next"
+            app:layout_constraintEnd_toStartOf="@+id/image_next"
             app:layout_constraintTop_toTopOf="@+id/image_next"
             tools:ignore="ContentDescription" />
 
@@ -142,7 +146,7 @@
             android:src="@drawable/skip_previous"
             android:layout_marginEnd="@dimen/mini_button_margin"
             app:layout_constraintBottom_toBottomOf="@+id/image_stop"
-            app:layout_constraintEnd_toEndOf="@+id/image_stop"
+            app:layout_constraintEnd_toStartOf="@+id/image_stop"
             app:layout_constraintTop_toTopOf="@+id/image_stop"
             tools:ignore="ContentDescription" />
 
@@ -157,5 +161,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
