@@ -1,5 +1,6 @@
 package com.example.testyoutube.di
 
+import com.example.testyoutube.data.api.ApiService
 import com.example.testyoutube.data.repository.VideoRepository
 import dagger.Module
 import dagger.Provides
@@ -13,8 +14,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideVideoRepository(): VideoRepository {
-        return VideoRepository()
+    fun provideVideoRepository(apiService: ApiService): VideoRepository {
+        return VideoRepository(apiService)
     }
 
 }
