@@ -4,27 +4,26 @@ package com.example.testyoutube.bindingadapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.media.Image
 import android.os.Build
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterInside
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.testyoutube.R
+import com.example.testyoutube.data.videolistitem.ItemVideo
 
 object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("loadImage")
-    fun loadImage(imageView: ImageView, image: String?) {
-        Glide.with(imageView.context).load(image)
-            .transform(CenterInside(), RoundedCorners(24))
+    fun loadImage(imageView: ImageView, item: ItemVideo) {
+        Glide.with(imageView.context).load(item.imageurl)
+            .override(item.imagewidth, item.imageheight)
             .placeholder(R.drawable.music)
             .into(imageView)
     }
@@ -42,6 +41,12 @@ object BindingAdapter {
             })
         view.setTextColor(color)
         view.setCompoundDrawableTintList(ColorStateList.valueOf(color))
+    }
+
+    @JvmStatic
+    @BindingAdapter("setVisible")
+    fun setVisible(view: View, isVisible: Boolean) {
+        view.visibility = if( isVisible ) VISIBLE else GONE
     }
 
 }

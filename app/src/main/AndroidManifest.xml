@@ -14,7 +14,7 @@
         android:theme="@style/Theme.TestYoutube"
         tools:targetApi="33">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

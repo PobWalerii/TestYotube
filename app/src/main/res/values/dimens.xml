@@ -24,9 +24,14 @@
     <dimen name="mini_button_margin_end">10dp</dimen>
     <dimen name="mini_button_size">30dp</dimen>
     <dimen name="mini_image_size">72dp</dimen>
-    <dimen name="channels_image_size">201dp</dimen>
+
     <dimen name="mini_image_padding">2dp</dimen>
     <dimen name="mini_player_text_margin">10dp</dimen>
     <dimen name="mini_player_border_margin">10dp</dimen>
+    <dimen name="progress_size">70dp</dimen>
 
+    <dimen name="horisontal_item_margin_start">5dp</dimen>
+    <dimen name="horisontal_item_margin_top">5dp</dimen>
+    <dimen name="channels_image_size">190dp</dimen>  <!--201dp-->
+    <dimen name="image_corner_size">5dp</dimen>
 </resources>

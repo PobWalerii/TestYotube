@@ -1,7 +1,7 @@
 package com.example.delivery.utils
 
-sealed class ResponseState<T> (val data: T? = null, val exception: Exception? = null){
+sealed class ResponseState<T> (val data: T? = null, val message: String? = null){
     class Success<T>(data: T?) : ResponseState<T>(data)
     class Loading<T>(val isLoading: Boolean) : ResponseState<T>(null)
-    class Error<T>(exception: Exception?, data: T? = null) : ResponseState<T>(data, exception)
+    class Error<T>(message: String?, data: T? = null) : ResponseState<T>(data, message)
 }

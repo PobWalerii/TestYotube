@@ -5,7 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
-
     @GET("search")
     suspend fun getYoutube(
         @Query("part") part: String,
@@ -15,5 +14,4 @@ interface ApiService {
         @Query("order") order: String,
         @Query("key") key: String
     ): YoutubeResponse
-
 }

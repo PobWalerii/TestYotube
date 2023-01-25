@@ -4,10 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.delivery.utils.ListError
+import com.example.delivery.utils.ListLoaded
+import com.example.delivery.utils.ListLoading
+import com.example.delivery.utils.ListUiState
 import com.example.testyoutube.R
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
 import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
@@ -18,8 +25,14 @@ class YoutubeScreenFragment : Fragment() {
     private var _binding: FragmentYoutubeScreenBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<VideoListViewModel>()
+    private lateinit var horisontalAdapter: HorisontalListAdapter
+    private lateinit var verticalAdapter: VerticalListAdapter
+    private lateinit var horisontalRecyclerView: RecyclerView
+    private lateinit var verticalRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupAdapters()
     }
 
     override fun onCreateView(
@@ -33,8 +46,25 @@ class YoutubeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startUI()
+        setupRecyclers()
+        observeUiState()
         setOnMenuClickListener()
         setOnSearchClickListener()
+    }
+
+    private fun setupAdapters() {
+        horisontalAdapter = HorisontalListAdapter()
+        horisontalAdapter.setHasStableIds(true)
+        verticalAdapter = VerticalListAdapter()
+        verticalAdapter.setHasStableIds(true)
+    }
+
+    private fun setupRecyclers() {
+        horisontalRecyclerView = binding.recyclerChannels
+        horisontalRecyclerView.adapter = horisontalAdapter
+        verticalRecyclerView = binding.recyclerContent
+        verticalRecyclerView.adapter = verticalAdapter
+        verticalRecyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
     }
 
     private fun startUI() {
@@ -57,8 +87,7 @@ class YoutubeScreenFragment : Fragment() {
     }
 
     private fun getVideoList(keyWord: String) {
-
-
+        viewModel.getVideoList(keyWord)
     }
 
     private fun setOnMenuClickListener() {
@@ -68,6 +97,32 @@ class YoutubeScreenFragment : Fragment() {
             )
         }
     }
+
+    private fun observeUiState() {
+        viewModel.state.observe(viewLifecycleOwner, ::handleUiState)
+    }
+
+    private fun handleUiState(state: ListUiState) {
+        when (state) {
+            is ListError -> Toast.makeText(
+                requireContext(), state.message, Toast.LENGTH_SHORT
+            ).show()
+            is ListLoaded -> {
+                state.data.apply {
+                    horisontalAdapter.setList(this)
+                    verticalAdapter.setList(this)
+                }
+            }
+            is ListLoading -> {
+                binding.visibleProgress = state.isLoading
+            }
+        }
+    }
+
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
