@@ -10,6 +10,10 @@ import com.example.testyoutube.R
 import com.example.testyoutube.databinding.FragmentFilesScreenBinding
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
 
+//https://riptutorial.com/android/example/23916/fetch-audio-mp3-files-from-specific-folder-of-device-or-fetch-all-files
+//android kotlin mp3 files in directory
+//https://developer.android.com/training/data-storage/shared/media
+
 class FilesScreenFragment : Fragment() {
 
     private var _binding: FragmentFilesScreenBinding? = null

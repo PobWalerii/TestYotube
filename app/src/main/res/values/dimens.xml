@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="app_bar_height">83dp</dimen>
-    <dimen name="app_bar_text_margin_start">25dp</dimen>
-    <dimen name="app_bar_text_margin_top">25dp</dimen>
+    <dimen name="app_bar_height">78dp</dimen>
+    <dimen name="app_bar_text_margin_start">20dp</dimen>
+    <dimen name="app_bar_text_margin_top">20dp</dimen>
     <dimen name="app_bar_button_search_width">32dp</dimen>
     <dimen name="app_bar_button_search_height">40dp</dimen>
-    <dimen name="app_bar_button_search_margin_top">27dp</dimen>
-    <dimen name="app_bar_button_search_margin_end">27dp</dimen>
-    <dimen name="app_bar_border_margin_start">25dp</dimen>
-    <dimen name="app_bar_border_margin_end">25dp</dimen>
-    <dimen name="app_bar_border_margin_top">27dp</dimen>
+    <dimen name="app_bar_button_search_margin_top">22dp</dimen>
+    <dimen name="app_bar_button_search_margin_end">22dp</dimen>
+    <dimen name="app_bar_border_margin_start">20dp</dimen>
+    <dimen name="app_bar_border_margin_end">20dp</dimen>
+    <dimen name="app_bar_border_margin_top">22dp</dimen>
     <dimen name="app_bar_border_margin_bottom">17dp</dimen>
 
     <dimen name="button_margin">25dp</dimen>
     <dimen name="button_text_size">12sp</dimen>
     <dimen name="title_margin_top">10dp</dimen>
-    <dimen name="text_title_size">20sp</dimen>
+    <dimen name="text_title_size">18sp</dimen>
     <dimen name="text_search_size">17sp</dimen>
-    <dimen name="title_margin_start">20dp</dimen>
+    <dimen name="title_margin_start">10dp</dimen>
     <dimen name="height_recyclerChannels">239dp</dimen>
     <dimen name="height_mini_player">72dp</dimen>
     <dimen name="mini_button_margin">20dp</dimen>
@@ -30,8 +30,12 @@
     <dimen name="mini_player_border_margin">10dp</dimen>
     <dimen name="progress_size">70dp</dimen>
 
-    <dimen name="horisontal_item_margin_start">5dp</dimen>
-    <dimen name="horisontal_item_margin_top">5dp</dimen>
+    <dimen name="recycler_content_margin">10dp</dimen>
+    <dimen name="item_margin">5dp</dimen>
     <dimen name="channels_image_size">190dp</dimen>  <!--201dp-->
     <dimen name="image_corner_size">5dp</dimen>
+    <dimen name="horisontal_item_channel_text_size">14sp</dimen>
+    <dimen name="vertical_item_channel_text_size">12sp</dimen>
+    <dimen name="horisontal_item_tytle_text_size">10sp</dimen>
+    <dimen name="vertical_item_tytle_text_size">8sp</dimen>
 </resources>

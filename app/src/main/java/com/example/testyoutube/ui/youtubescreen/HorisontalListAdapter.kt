@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
 import com.example.testyoutube.data.videolistitem.ItemVideo
 import com.example.testyoutube.databinding.ChannelsListItemBinding
+import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 
 class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHolder>() {
 
@@ -70,7 +71,7 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
 
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<ItemVideo>) {
-        listVideo = list.take(10)
+        listVideo = list.take(COUNT_HORIZONTAL_ITEMS)
         notifyDataSetChanged()
     }
 

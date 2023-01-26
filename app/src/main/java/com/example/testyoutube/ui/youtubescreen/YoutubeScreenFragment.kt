@@ -1,6 +1,8 @@
 package com.example.testyoutube.ui.youtubescreen
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.delivery.utils.ListError
 import com.example.delivery.utils.ListLoaded
 import com.example.delivery.utils.ListLoading
@@ -64,15 +66,20 @@ class YoutubeScreenFragment : Fragment() {
         horisontalRecyclerView.adapter = horisontalAdapter
         verticalRecyclerView = binding.recyclerContent
         verticalRecyclerView.adapter = verticalAdapter
-        verticalRecyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        verticalRecyclerView.layoutManager = GridLayoutManager(requireContext(),3)
     }
-
     private fun startUI() {
         binding.bottomBar.active = 1
-        val sPref = requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
-        val default = getString(R.string.start_response)
-        val startResponse = sPref.getString("textResponse", default)
-        getVideoList(startResponse ?: default)
+        if ( !viewModel.isStarted ) {
+            val sPref =
+                requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
+            val default = getString(R.string.start_response)
+            val startResponse = sPref.getString("textSearch", default)
+            val keyWord = startResponse ?: default
+            viewModel.keyWord = keyWord
+            getVideoList(keyWord)
+            viewModel.isStarted = true
+        }
     }
 
     private fun setOnSearchClickListener() {
@@ -81,6 +88,7 @@ class YoutubeScreenFragment : Fragment() {
             val keyWord = textView.text.toString()
             if (keyWord.isNotEmpty()) {
                 hideKeyboardFromView(textView.context, textView)
+                viewModel.keyWord = keyWord
                 getVideoList(keyWord)
             }
         }
@@ -111,6 +119,10 @@ class YoutubeScreenFragment : Fragment() {
                 state.data.apply {
                     horisontalAdapter.setList(this)
                     verticalAdapter.setList(this)
+                    val keyWord = viewModel.keyWord
+                    binding.responseSize = this.size
+                    binding.searchText = keyWord
+                    saveSearhText(keyWord)
                 }
             }
             is ListLoading -> {
@@ -119,10 +131,12 @@ class YoutubeScreenFragment : Fragment() {
         }
     }
 
-
-
-
-
+    private fun saveSearhText(keyWord: String) {
+        val sPref = requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
+        val ed: SharedPreferences.Editor = sPref.edit()
+        ed.putString("textSearch", keyWord)
+        ed.apply()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

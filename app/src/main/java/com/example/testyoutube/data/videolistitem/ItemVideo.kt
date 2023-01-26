@@ -7,6 +7,7 @@ data class ItemVideo(
     val title: String,
     val description: String,
     val imageurl: String,
+    val imageDefaultUrl: String,
     val imagewidth: Int,
     val imageheight: Int
 )

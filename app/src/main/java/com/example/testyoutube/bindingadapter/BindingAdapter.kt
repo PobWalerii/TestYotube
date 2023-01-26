@@ -5,17 +5,22 @@ package com.example.testyoutube.bindingadapter
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Build
+import android.provider.Settings.Global.getString
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.example.testyoutube.R
 import com.example.testyoutube.data.videolistitem.ItemVideo
+import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 
 object BindingAdapter {
 
@@ -24,7 +29,16 @@ object BindingAdapter {
     fun loadImage(imageView: ImageView, item: ItemVideo) {
         Glide.with(imageView.context).load(item.imageurl)
             .override(item.imagewidth, item.imageheight)
+            .into(imageView)
+    }
+
+    @JvmStatic
+    @BindingAdapter("loadImageVertical")
+    fun loadImageVertical(imageView: ImageView, item: ItemVideo) {
+        Glide.with(imageView.context).load(item.imageDefaultUrl)
+            .override(item.imagewidth, item.imageheight)
             .placeholder(R.drawable.music)
+            .centerCrop()
             .into(imageView)
     }
 
@@ -47,6 +61,36 @@ object BindingAdapter {
     @BindingAdapter("setVisible")
     fun setVisible(view: View, isVisible: Boolean) {
         view.visibility = if( isVisible ) VISIBLE else GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("firstText","firstSize","firstLoad")
+    fun TextView.setFirstTytle(firstText: String?, firstSize: Int, firstLoad: Boolean) {
+        this.text =
+            if (firstLoad || firstSize==0) {
+                this.context.getString(R.string.loading)
+            } else {
+                if (firstSize < COUNT_HORIZONTAL_ITEMS) {
+                    "${this.context.getString(R.string.search_result)} ($firstSize) $firstText"
+                } else {
+                    "${this.context.getString(R.string.full_result)}$COUNT_HORIZONTAL_ITEMS. $firstText"
+                }
+            }
+    }
+
+    @JvmStatic
+    @BindingAdapter("secondText","secondSize","secondLoad")
+    fun TextView.setSecondTytle(secondText: String?, secondSize: Int, secondLoad: Boolean) {
+        this.text =
+            if(secondLoad || secondSize == 0) {
+                this.context.getString(R.string.loading)
+            } else {
+                if (secondSize < COUNT_HORIZONTAL_ITEMS) {
+                    "${this.context.getString(R.string.search_result)} ($secondSize) $secondText"
+                } else {
+                    "${this.context.getString(R.string.full_result)}$secondSize. $secondText"
+                }
+            }
     }
 
 }

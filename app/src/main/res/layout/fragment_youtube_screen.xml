@@ -7,6 +7,12 @@
         <variable
             name="visibleProgress"
             type="Boolean" />
+        <variable
+            name="responseSize"
+            type="Integer" />
+        <variable
+            name="searchText"
+            type="String" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +35,9 @@
         android:layout_marginStart="@dimen/title_margin_start"
         android:layout_marginTop="@dimen/title_margin_top"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="Топ-10 Українськи пісні"
+        app:firstText="@{searchText}"
+        app:firstSize="@{responseSize}"
+        app:firstLoad="@{visibleProgress}"
         android:textColor="@color/text_title_color"
         android:textSize="@dimen/text_title_size"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,8 +69,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/title_margin_start"
+        android:layout_marginTop="@dimen/title_margin_top"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="Топ-100 Українськи пісні"
+        app:secondText="@{searchText}"
+        app:secondSize="@{responseSize}"
+        app:secondLoad="@{visibleProgress}"
         android:textColor="@color/text_title_color"
         android:textSize="@dimen/text_title_size"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,9 +82,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerContent"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
+        android:layout_marginStart="@dimen/recycler_content_margin"
+        android:layout_marginTop="@dimen/item_margin"
+        android:layout_marginBottom="@dimen/recycler_content_margin"
         app:layout_constraintBottom_toTopOf="@+id/mini_player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

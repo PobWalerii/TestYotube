@@ -19,6 +19,9 @@ class VideoListViewModel @Inject constructor(
     private var _state: MutableLiveData<ListUiState> = MutableLiveData()
     val state: LiveData<ListUiState> = _state
 
+    var keyWord = ""
+    var isStarted = false
+
     fun getVideoList(keyWord: String) {
         viewModelScope.launch {
             repository

@@ -11,4 +11,5 @@
     <color name="active_button">#7C8EBB</color>
     <color name="scrback">#1A1B1E</color>
     <color name="text_title_color">#BEC2CA</color>
+    <color name="item_tytle_color">#9EB4EC</color>
 </resources>
