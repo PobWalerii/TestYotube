@@ -3,14 +3,16 @@ package com.example.testyoutube.data.repository
 import com.example.delivery.utils.ResponseState
 import com.example.testyoutube.data.api.ApiService
 import com.example.testyoutube.data.apimodel.YoutubeResponse
-import com.example.testyoutube.data.videolistitem.ItemVideo
+import com.example.testyoutube.data.database.dao.VideoDao
+import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class VideoRepository @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val videoDao: VideoDao
 ){
     fun getVideoList(keyWord: String): Flow<ResponseState<List<ItemVideo>>> {
         return flow {
@@ -26,10 +28,25 @@ class VideoRepository @Inject constructor(
                 )
                 val list: List<ItemVideo> = VideoMapper(response).mapToVideoList()
                 emit(ResponseState.Success(list))
+                saveToDatabase(list)
             } catch (exception: Exception) {
                 emit(ResponseState.Error(exception.message ?: "Data loading error!"))
             }
             emit(ResponseState.Loading(false))
+        }
+    }
+
+    fun getVideoFromDatabase(): Flow<ResponseState<List<ItemVideo>>> {
+        return flow {
+            val list: List<ItemVideo> = videoDao.getVideoList()
+            emit(ResponseState.Database(list))
+        }
+    }
+
+    private suspend fun saveToDatabase(list: List<ItemVideo>) {
+        videoDao.deleteAll()
+        list.map {
+            videoDao.insertVideo(it)
         }
     }
 

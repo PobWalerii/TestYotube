@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
-import com.example.testyoutube.data.videolistitem.ItemVideo
-import com.example.testyoutube.databinding.ChannelsListItemBinding
+import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.databinding.ContentListItemBinding
 
 class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>() {

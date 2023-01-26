@@ -5,7 +5,6 @@ package com.example.testyoutube.bindingadapter
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Build
-import android.provider.Settings.Global.getString
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -16,10 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.example.testyoutube.R
-import com.example.testyoutube.data.videolistitem.ItemVideo
+import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 
 object BindingAdapter {
@@ -27,18 +24,9 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("loadImage")
     fun loadImage(imageView: ImageView, item: ItemVideo) {
-        Glide.with(imageView.context).load(item.imageurl)
-            .override(item.imagewidth, item.imageheight)
-            .into(imageView)
-    }
-
-    @JvmStatic
-    @BindingAdapter("loadImageVertical")
-    fun loadImageVertical(imageView: ImageView, item: ItemVideo) {
-        Glide.with(imageView.context).load(item.imageDefaultUrl)
-            .override(item.imagewidth, item.imageheight)
-            .placeholder(R.drawable.music)
-            .centerCrop()
+        Glide.with(imageView.context).load(item.imageUrl)
+            .override(item.imageWidth, item.imageHeight)
+            .placeholder(R.drawable.image_music)
             .into(imageView)
     }
 

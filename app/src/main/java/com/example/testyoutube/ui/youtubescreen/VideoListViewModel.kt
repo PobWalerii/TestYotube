@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.delivery.utils.*
 import com.example.testyoutube.data.repository.VideoRepository
-import com.example.testyoutube.data.videolistitem.ItemVideo
+import com.example.testyoutube.data.database.entity.ItemVideo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +30,14 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
+    fun getVideoFromDatabase() {
+        viewModelScope.launch {
+            repository
+                .getVideoFromDatabase()
+                .collect(::handleResponse)
+        }
+    }
+
     private fun handleResponse(resourse: ResponseState<List<ItemVideo>>) {
         when (resourse) {
             is ResponseState.Error -> {
@@ -40,6 +48,9 @@ class VideoListViewModel @Inject constructor(
             }
             is ResponseState.Success -> {
                 _state.value = ListLoaded(resourse.data ?: emptyList())
+            }
+            is ResponseState.Database -> {
+                _state.value = ListFromBase(resourse.data ?: emptyList())
             }
         }
     }

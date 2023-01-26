@@ -2,7 +2,6 @@ package com.example.testyoutube.ui.youtubescreen
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.delivery.utils.ListError
-import com.example.delivery.utils.ListLoaded
-import com.example.delivery.utils.ListLoading
-import com.example.delivery.utils.ListUiState
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.delivery.utils.*
 import com.example.testyoutube.R
+import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
 import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +65,7 @@ class YoutubeScreenFragment : Fragment() {
         verticalRecyclerView = binding.recyclerContent
         verticalRecyclerView.adapter = verticalAdapter
         verticalRecyclerView.layoutManager = GridLayoutManager(requireContext(),3)
+        //verticalRecyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
     }
     private fun startUI() {
         binding.bottomBar.active = 1
@@ -77,7 +76,8 @@ class YoutubeScreenFragment : Fragment() {
             val startResponse = sPref.getString("textSearch", default)
             val keyWord = startResponse ?: default
             viewModel.keyWord = keyWord
-            getVideoList(keyWord)
+            getVideoFromDatabase()
+            //getVideoList(keyWord)
             viewModel.isStarted = true
         }
     }
@@ -96,6 +96,9 @@ class YoutubeScreenFragment : Fragment() {
 
     private fun getVideoList(keyWord: String) {
         viewModel.getVideoList(keyWord)
+    }
+    private fun getVideoFromDatabase() {
+        viewModel.getVideoFromDatabase()
     }
 
     private fun setOnMenuClickListener() {
@@ -117,18 +120,33 @@ class YoutubeScreenFragment : Fragment() {
             ).show()
             is ListLoaded -> {
                 state.data.apply {
-                    horisontalAdapter.setList(this)
-                    verticalAdapter.setList(this)
-                    val keyWord = viewModel.keyWord
-                    binding.responseSize = this.size
-                    binding.searchText = keyWord
-                    saveSearhText(keyWord)
+                    refreshUi(this)
+                    //horisontalAdapter.setList(this)
+                    //verticalAdapter.setList(this)
+                    //val keyWord = viewModel.keyWord
+                    //binding.responseSize = this.size
+                    //binding.searchText = keyWord
+                    //saveSearhText(keyWord)
                 }
             }
             is ListLoading -> {
                 binding.visibleProgress = state.isLoading
             }
+            is ListFromBase -> {
+                state.data.apply {
+                    refreshUi(this)
+                }
+            }
         }
+    }
+
+    private fun refreshUi(list: List<ItemVideo>) {
+        horisontalAdapter.setList(list)
+        verticalAdapter.setList(list)
+        val keyWord = viewModel.keyWord
+        binding.responseSize = list.size
+        binding.searchText = keyWord
+        saveSearhText(keyWord)
     }
 
     private fun saveSearhText(keyWord: String) {
