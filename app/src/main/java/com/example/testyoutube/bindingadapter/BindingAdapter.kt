@@ -65,7 +65,7 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("firstText","firstSize","firstLoad")
-    fun TextView.setFirstTytle(firstText: String?, firstSize: Int, firstLoad: Boolean) {
+    fun TextView.setFirstTitle(firstText: String?, firstSize: Int, firstLoad: Boolean) {
         this.text =
             if (firstLoad || firstSize==0) {
                 this.context.getString(R.string.loading)
@@ -80,7 +80,7 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("secondText","secondSize","secondLoad")
-    fun TextView.setSecondTytle(secondText: String?, secondSize: Int, secondLoad: Boolean) {
+    fun TextView.setSecondTitle(secondText: String?, secondSize: Int, secondLoad: Boolean) {
         this.text =
             if(secondLoad || secondSize == 0) {
                 this.context.getString(R.string.loading)
