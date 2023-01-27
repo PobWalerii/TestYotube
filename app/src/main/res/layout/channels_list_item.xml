@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:singleLine="true"
-            android:text="@{item.channelTitle}"
+            android:text="@{item.title}"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/horisontal_item_channel_text_size" />
 
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:singleLine="true"
-            android:text="@{item.title}"
+            android:text="@{item.channelTitle}"
             android:textAllCaps="true"
             android:textColor="@color/item_tytle_color"
             android:textSize="@dimen/horisontal_item_tytle_text_size" />

@@ -16,6 +16,7 @@ import com.example.delivery.utils.*
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
+import com.example.testyoutube.ui.videoplayscreen.VideoPlayFragment
 import com.example.testyoutube.utils.Constants
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
@@ -46,7 +47,7 @@ class YoutubeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toast.makeText(context,"onViewCreated",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context,"onViewCreated",Toast.LENGTH_SHORT).show()
         startUI()
         setupRecyclers()
         observeUiState()
@@ -54,6 +55,7 @@ class YoutubeScreenFragment : Fragment() {
         setOnSearchClickListener()
         setupItemClickListener()
         setItemNavigationListener()
+        startVideoListener()
     }
 
     private fun setupItemClickListener() {
@@ -70,8 +72,8 @@ class YoutubeScreenFragment : Fragment() {
     }
 
     private fun miniPlayerSetItem(current: ItemVideo) {
-        Toast.makeText(context,"miniPlayerSetItem",Toast.LENGTH_SHORT).show()
-        viewModel.currentItem = current
+        //Toast.makeText(context,"miniPlayerSetItem",Toast.LENGTH_SHORT).show()
+        viewModel.setCurrentVideo(current)
         with (binding.miniPlayer) {
             image = current.imageUrl
             channel = current.channelTitle
@@ -81,7 +83,7 @@ class YoutubeScreenFragment : Fragment() {
     }
 
     private fun setupAdapters() {
-        Toast.makeText(context,"setupAdapters",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context,"setupAdapters",Toast.LENGTH_SHORT).show()
         horisontalAdapter = HorisontalListAdapter()
         horisontalAdapter.setHasStableIds(true)
         verticalAdapter = VerticalListAdapter()
@@ -89,7 +91,7 @@ class YoutubeScreenFragment : Fragment() {
     }
 
     private fun setupRecyclers() {
-        Toast.makeText(context,"setupRecycler",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context,"setupRecycler",Toast.LENGTH_SHORT).show()
         horisontalRecyclerView = binding.recyclerChannels
         horisontalRecyclerView.adapter = horisontalAdapter
         verticalRecyclerView = binding.recyclerContent
@@ -100,7 +102,7 @@ class YoutubeScreenFragment : Fragment() {
     private fun startUI() {
         binding.bottomBar.active = 1
         if ( !viewModel.isStarted ) {
-            Toast.makeText(context,"startUI",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context,"startUI",Toast.LENGTH_SHORT).show()
             val sPref =
                 requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
             val default = getString(R.string.start_response)
@@ -115,7 +117,7 @@ class YoutubeScreenFragment : Fragment() {
 
     private fun setOnSearchClickListener() {
         binding.appBarLayout.search.setOnClickListener {
-            Toast.makeText(context,"setOnSearchClickListener",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context,"setOnSearchClickListener",Toast.LENGTH_SHORT).show()
             val textView = binding.appBarLayout.textSearch
             val keyWord = textView.text.toString()
             if (keyWord.isNotEmpty()) {
@@ -127,11 +129,11 @@ class YoutubeScreenFragment : Fragment() {
     }
 
     private fun getVideoList(keyWord: String) {
-        Toast.makeText(context,"getVideoList",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context,"getVideoList",Toast.LENGTH_SHORT).show()
         viewModel.getVideoList(keyWord)
     }
     private fun getVideoFromDatabase() {
-        Toast.makeText(context,"getVideoFromDatabase",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context,"getVideoFromDatabase",Toast.LENGTH_SHORT).show()
         viewModel.getVideoFromDatabase()
     }
 
@@ -142,6 +144,13 @@ class YoutubeScreenFragment : Fragment() {
             )
         }
     }
+    private fun startVideoListener() {
+        binding.miniPlayer.miniPlayerContainer.setOnClickListener {
+            findNavController().navigate(
+                YoutubeScreenFragmentDirections.actionYoutubeScreenFragmentToVideoPlayFragment()
+            )
+        }
+    }
 
     private fun observeUiState() {
         viewModel.state.observe(viewLifecycleOwner, ::handleUiState)
@@ -149,12 +158,14 @@ class YoutubeScreenFragment : Fragment() {
 
     private fun handleUiState(state: ListUiState) {
         when (state) {
-            is ListError -> Toast.makeText(
-                requireContext(), state.message, Toast.LENGTH_SHORT
-            ).show()
+            is ListError -> {
+                Toast.makeText(
+                    requireContext(), state.message, Toast.LENGTH_SHORT
+                ).show()
+            }
             is ListLoaded -> {
                 state.data.apply {
-                    Toast.makeText(context,"ListLoaded",Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context,"ListLoaded",Toast.LENGTH_SHORT).show()
                     refreshUi(this)
                 }
             }
@@ -163,22 +174,29 @@ class YoutubeScreenFragment : Fragment() {
             }
             is ListFromBase -> {
                 state.data.apply {
-                Toast.makeText(context, "ListFromBase", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "ListFromBase", Toast.LENGTH_SHORT).show()
                     refreshUi(this)
+                    viewModel.isBaseLoaded = true
                 }
             }
         }
     }
 
     private fun refreshUi(list: List<ItemVideo>) {
-        Toast.makeText(context,"refreshUi",Toast.LENGTH_SHORT).show()
+        viewModel.setCurrentList(list)
+        //Toast.makeText(context, "refreshUi", Toast.LENGTH_SHORT).show()
         horisontalAdapter.setList(list.take(COUNT_HORIZONTAL_ITEMS))
         verticalAdapter.setList(list)
         val keyWord = viewModel.keyWord
         binding.responseSize = list.size
         binding.searchText = keyWord
         saveSearhText(keyWord)
-        miniPlayerSetItem(list[0])
+        //****************************************************************************
+        if(viewModel.getCurrentVideo() == null) {
+            viewModel.setCurrentVideo(list[0])
+        }
+        refreshPlayer(0)
+        miniPlayerSetItem(viewModel.getCurrentVideo() ?: list[0])
     }
 
     private fun setItemNavigationListener() {
@@ -191,8 +209,8 @@ class YoutubeScreenFragment : Fragment() {
     }
 
     private fun refreshPlayer(bias: Int) {
-        Toast.makeText(context,"refreshPlayer",Toast.LENGTH_SHORT).show()
-        val position = verticalAdapter.getPosition(viewModel.currentItem, bias)
+        //Toast.makeText(context,"refreshPlayer",Toast.LENGTH_SHORT).show()
+        val position = verticalAdapter.getPosition(viewModel.getCurrentVideo(), bias)
         if(position != -1) {
             val item: ItemVideo = verticalAdapter.getItemFromPosition(position)
             verticalRecyclerView.layoutManager?.scrollToPosition(position)
@@ -212,7 +230,7 @@ class YoutubeScreenFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Toast.makeText(context,"onResume",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context,"onResume",Toast.LENGTH_SHORT).show()
     }
     override fun onDestroyView() {
         super.onDestroyView()

@@ -20,13 +20,14 @@
     <dimen name="title_margin_start">10dp</dimen>
     <dimen name="height_recyclerChannels">239dp</dimen>
     <dimen name="height_mini_player">72dp</dimen>
-    <dimen name="mini_button_margin">10dp</dimen>
+    <dimen name="mini_button_margin">15dp</dimen>
     <dimen name="mini_button_margin_end">5dp</dimen>
     <dimen name="mini_button_size">25dp</dimen>
     <dimen name="mini_image_size">72dp</dimen>
 
     <dimen name="mini_image_padding">2dp</dimen>
     <dimen name="mini_player_text_margin">10dp</dimen>
+    <dimen name="mini_player_text_margin_top">5dp</dimen>
     <dimen name="mini_player_border_margin">15dp</dimen>
 
 
@@ -39,4 +40,11 @@
     <dimen name="vertical_item_channel_text_size">12sp</dimen>
     <dimen name="horisontal_item_tytle_text_size">10sp</dimen>
     <dimen name="vertical_item_tytle_text_size">8sp</dimen>
+
+    <dimen name="video_fragment_ico_margin">15dp</dimen>
+    <dimen name="video_fragmen_title_margin">50dp</dimen>
+    <dimen name="video_fragmen_channel_margin">20dp</dimen>
+    <dimen name="video_fragment_title_size">18sp</dimen>
+    <dimen name="video_fragment_channel_size">14sp</dimen>
+    <dimen name="video_fragment_text_margin">10dp</dimen>
 </resources>

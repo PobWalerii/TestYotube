@@ -13,10 +13,17 @@
         <action
             android:id="@+id/action_youtubeScreenFragment_to_filesScreenFragment"
             app:destination="@id/filesScreenFragment" />
+        <action
+            android:id="@+id/action_youtubeScreenFragment_to_videoPlayFragment"
+            app:destination="@id/videoPlayFragment" />
     </fragment>
     <fragment
         android:id="@+id/filesScreenFragment"
         android:name="com.example.testyoutube.ui.filesscreen.FilesScreenFragment"
         android:label="fragment_files_screen"
         tools:layout="@layout/fragment_files_screen" />
+    <fragment
+        android:id="@+id/videoPlayFragment"
+        android:name="com.example.testyoutube.ui.videoplayscreen.VideoPlayFragment"
+        android:label="VideoPlayFragment" />
 </navigation>

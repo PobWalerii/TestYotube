@@ -27,6 +27,7 @@ object DatabaseModule {
     }
 
     @Provides
+    @Singleton
     fun provideClientsDao(database: AppDatabase): VideoDao {
         return database.videoDao()
     }

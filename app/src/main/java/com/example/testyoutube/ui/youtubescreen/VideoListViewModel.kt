@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.delivery.utils.*
 import com.example.testyoutube.data.repository.VideoRepository
 import com.example.testyoutube.data.database.entity.ItemVideo
+import com.example.testyoutube.data.exchange.VideoExchange
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoListViewModel @Inject constructor(
     private val repository: VideoRepository,
+    private val exchange: VideoExchange
 ) : ViewModel() {
 
     private var _state: MutableLiveData<ListUiState> = MutableLiveData()
@@ -22,7 +24,15 @@ class VideoListViewModel @Inject constructor(
     var keyWord = ""
     var isStarted = false
     var isBaseLoaded = false
-    var currentItem: ItemVideo? = null
+
+    fun setCurrentVideo(item: ItemVideo) {
+        exchange.setCurrentVideo(item)
+    }
+    fun getCurrentVideo(): ItemVideo? = exchange.getCurrentVideo()
+
+    fun setCurrentList(list: List<ItemVideo>) {
+        exchange.setCurrentList(list)
+    }
 
     fun getVideoList(keyWord: String) {
         viewModelScope.launch {
