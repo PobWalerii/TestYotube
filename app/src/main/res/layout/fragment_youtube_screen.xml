@@ -1,206 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="visibleProgress"
             type="Boolean" />
+
         <variable
             name="responseSize"
             type="Integer" />
+
         <variable
             name="searchText"
             type="String" />
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/scrback"
-    tools:context=".ui.youtubescreen.YoutubeScreenFragment">
-
-    <include
-        android:id="@+id/appBarLayout"
-        layout="@layout/search_appbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/titleForChannels"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/title_margin_start"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:fontFamily="sans-serif-smallcaps"
-        app:firstText="@{searchText}"
-        app:firstSize="@{responseSize}"
-        app:firstLoad="@{visibleProgress}"
-        android:textColor="@color/text_title_color"
-        android:textSize="@dimen/text_title_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerChannels"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_recyclerChannels"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleForChannels"/>
-
-    <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="@dimen/progress_size"
-        android:layout_height="@dimen/progress_size"
-        app:setVisible="@{visibleProgress}"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerChannels"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerChannels" />
-
-    <TextView
-        android:id="@+id/titleForContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/title_margin_start"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:fontFamily="sans-serif-smallcaps"
-        app:secondText="@{searchText}"
-        app:secondSize="@{responseSize}"
-        app:secondLoad="@{visibleProgress}"
-        android:textColor="@color/text_title_color"
-        android:textSize="@dimen/text_title_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerChannels" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerContent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginEnd="@dimen/item_margin"
-        android:layout_marginTop="@dimen/item_margin"
-        android:layout_marginBottom="@dimen/recycler_content_margin"
-        app:layout_constraintBottom_toTopOf="@+id/mini_player"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleForContent" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="@dimen/progress_size"
-        android:layout_height="@dimen/progress_size"
-        app:setVisible="@{visibleProgress}"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerContent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerContent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mini_player"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_mini_player"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent"
+        android:background="@color/scrback"
+        tools:context=".ui.youtubescreen.YoutubeScreenFragment">
 
-        <ImageView
-            android:id="@+id/border_player"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/mini_player_border_margin"
-            android:alpha="0.5"
-            android:src="@drawable/border"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/image_prev"
+        <include
+            android:id="@+id/appBarLayout"
+            layout="@layout/search_appbar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="@dimen/mini_image_size"
-            android:layout_height="match_parent"
-            android:src="@drawable/music"
-            android:padding="@dimen/mini_image_padding"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Название один"
-            android:layout_margin="@dimen/mini_player_text_margin"
-            android:textColor="@color/text_title_color"
-            app:layout_constraintEnd_toStartOf="@+id/image_prev"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/titleForChannels"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Имя автора"
-            android:layout_margin="@dimen/mini_player_text_margin"
-            android:textColor="@color/appbar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/image_prev"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            android:layout_marginStart="@dimen/title_margin_start"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_title_size"
+            app:firstLoad="@{visibleProgress}"
+            app:firstSize="@{responseSize}"
+            app:firstText="@{searchText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-        <ImageView
-            android:id="@+id/image_next"
-            android:layout_width="@dimen/mini_button_size"
-            android:layout_height="match_parent"
-            android:src="@drawable/skip_next"
-            android:layout_marginEnd="@dimen/mini_button_margin_end"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerChannels"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_recyclerChannels"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleForChannels" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="@dimen/progress_size"
+            android:layout_height="@dimen/progress_size"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerChannels"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerChannels"
+            app:setVisible="@{visibleProgress}" />
+
+        <TextView
+            android:id="@+id/titleForContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/title_margin_start"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_title_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerChannels"
+            app:secondLoad="@{visibleProgress}"
+            app:secondSize="@{responseSize}"
+            app:secondText="@{searchText}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/item_margin"
+            android:layout_marginEnd="@dimen/item_margin"
+            android:layout_marginBottom="@dimen/recycler_content_margin"
+            app:layout_constraintBottom_toTopOf="@+id/mini_player"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleForContent" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="@dimen/progress_size"
+            android:layout_height="@dimen/progress_size"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerContent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerContent"
+            app:setVisible="@{visibleProgress}" />
+
+        <include
+            android:id="@+id/mini_player"
+            layout="@layout/mini_player"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_mini_player"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/bottom_bar"
+            layout="@layout/bottom_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/image_stop"
-            android:layout_width="@dimen/mini_button_size"
-            android:layout_height="match_parent"
-            android:src="@drawable/pause"
-            android:layout_marginEnd="@dimen/mini_button_margin"
-            app:layout_constraintBottom_toBottomOf="@+id/image_next"
-            app:layout_constraintEnd_toStartOf="@+id/image_next"
-            app:layout_constraintTop_toTopOf="@+id/image_next"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/image_prev"
-            android:layout_width="@dimen/mini_button_size"
-            android:layout_height="match_parent"
-            android:src="@drawable/skip_previous"
-            android:layout_marginEnd="@dimen/mini_button_margin"
-            app:layout_constraintBottom_toBottomOf="@+id/image_stop"
-            app:layout_constraintEnd_toStartOf="@+id/image_stop"
-            app:layout_constraintTop_toTopOf="@+id/image_stop"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <include
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/bottom_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -20,16 +20,17 @@
     <dimen name="title_margin_start">10dp</dimen>
     <dimen name="height_recyclerChannels">239dp</dimen>
     <dimen name="height_mini_player">72dp</dimen>
-    <dimen name="mini_button_margin">20dp</dimen>
-    <dimen name="mini_button_margin_end">10dp</dimen>
-    <dimen name="mini_button_size">30dp</dimen>
+    <dimen name="mini_button_margin">10dp</dimen>
+    <dimen name="mini_button_margin_end">5dp</dimen>
+    <dimen name="mini_button_size">25dp</dimen>
     <dimen name="mini_image_size">72dp</dimen>
 
     <dimen name="mini_image_padding">2dp</dimen>
     <dimen name="mini_player_text_margin">10dp</dimen>
-    <dimen name="mini_player_border_margin">10dp</dimen>
-    <dimen name="progress_size">70dp</dimen>
+    <dimen name="mini_player_border_margin">15dp</dimen>
 
+
+    <dimen name="progress_size">70dp</dimen>
     <dimen name="recycler_content_margin">10dp</dimen>
     <dimen name="item_margin">10dp</dimen>
     <dimen name="channels_image_size">190dp</dimen>  <!--201dp-->

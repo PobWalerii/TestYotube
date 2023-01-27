@@ -36,7 +36,6 @@
 
         </androidx.cardview.widget.CardView>
 
-
         <TextView
             android:id="@+id/textChannelTytle"
             android:layout_width="match_parent"

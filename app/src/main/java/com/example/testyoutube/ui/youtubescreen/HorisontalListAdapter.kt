@@ -32,25 +32,25 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
         val holder = ViewHolder(view)
         val binding = holder.getBinding()
         binding.container.setOnClickListener {
-            itemClick(it, holder.adapterPosition, binding)
+            itemClick(holder.adapterPosition, binding)
         }
         return holder
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun itemClick(item: View, position: Int, binding: ChannelsListItemBinding) {
+    fun itemClick(position: Int, binding: ChannelsListItemBinding) {
         val current = listVideo[position]
         currentId = current.id
         binding.current = currentId
         notifyDataSetChanged()
-        listener?.onItemClick(item, current)
+        listener?.onItemClick(current)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
     interface OnItemClickListener {
-        fun onItemClick(item: View, current: ItemVideo)
+        fun onItemClick(current: ItemVideo)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -71,7 +71,7 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
 
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<ItemVideo>) {
-        listVideo = list.take(COUNT_HORIZONTAL_ITEMS)
+        listVideo = list
         notifyDataSetChanged()
     }
 

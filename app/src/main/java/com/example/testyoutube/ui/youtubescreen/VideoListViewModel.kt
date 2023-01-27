@@ -21,6 +21,8 @@ class VideoListViewModel @Inject constructor(
 
     var keyWord = ""
     var isStarted = false
+    var isBaseLoaded = false
+    var currentItem: ItemVideo? = null
 
     fun getVideoList(keyWord: String) {
         viewModelScope.launch {

@@ -30,6 +30,18 @@ object BindingAdapter {
             .into(imageView)
     }
 
+    @JvmStatic
+    @BindingAdapter("loadImageMini")
+    fun loadImageMini(imageView: ImageView, image: String?) {
+        if(image!=null) {
+            Glide.with(imageView.context).load(image)
+                .placeholder(R.drawable.square)
+                .centerCrop()
+                .into(imageView)
+        }
+    }
+
+
     @SuppressLint("UseCompatTextViewDrawableApis")
     @RequiresApi(Build.VERSION_CODES.M)
     @JvmStatic

@@ -31,25 +31,25 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
         val holder = ViewHolder(view)
         val binding = holder.getBinding()
         binding.container.setOnClickListener {
-            itemClick(it, holder.adapterPosition, binding)
+            itemClick(holder.adapterPosition, binding)
         }
         return holder
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun itemClick(item: View, position: Int, binding: ContentListItemBinding) {
+    fun itemClick(position: Int, binding: ContentListItemBinding) {
         val current = listVideo[position]
         currentId = current.id
         binding.current = currentId
         notifyDataSetChanged()
-        listener?.onItemClick(item, current)
+        listener?.onItemClick(current)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
     interface OnItemClickListener {
-        fun onItemClick(item: View, current: ItemVideo)
+        fun onItemClick(current: ItemVideo)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -59,7 +59,7 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
     override fun getItemCount(): Int = listVideo.size
     override fun getItemId(position: Int): Long = listVideo[position].id
 
-    fun getItemPosition(item: ItemVideo): Int = listVideo.indexOf(item)
+    fun getItemPosition(item: ItemVideo?): Int = listVideo.indexOf(item)
 
     fun getItemFromPosition(position: Int): ItemVideo = listVideo[position]
 
@@ -67,6 +67,15 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
         currentId = current
     }
     fun getCurrentId(): Long = currentId
+
+    fun getPosition(item: ItemVideo?, bias: Int): Int {
+        var position = getItemPosition(item) + bias
+        if(position<0 || position+1>listVideo.size) {
+            position = -1
+        }
+        return position
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<ItemVideo>) {

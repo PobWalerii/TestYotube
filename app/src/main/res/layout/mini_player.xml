@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="image"
+            type="String" />
+        <variable
+            name="channel"
+            type="String" />
+        <variable
+            name="title"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:id="@+id/mini_player_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_mini_player">
+
+        <ImageView
+            android:id="@+id/border_player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/mini_player_border_margin"
+            android:alpha="0.5"
+            android:src="@drawable/border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_prev"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/mini_image_size"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/mini_image_padding"
+            app:loadImageMini='@{image}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textChannel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/mini_player_text_margin"
+            android:layout_marginStart="@dimen/mini_player_text_margin"
+            android:layout_marginEnd="@dimen/mini_player_text_margin"
+            android:maxLines="2"
+            android:text="@{channel}"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/vertical_item_channel_text_size"
+            app:layout_constraintEnd_toEndOf="@+id/border_player"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/mini_player_text_margin"
+            android:layout_marginEnd="@dimen/mini_player_text_margin"
+            android:maxLines="3"
+            android:text="@{title}"
+            android:textAllCaps="true"
+            android:textColor="@color/item_tytle_color"
+            android:textSize="@dimen/vertical_item_tytle_text_size"
+            app:layout_constraintEnd_toEndOf="@+id/border_player"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/textChannel" />
+
+        <ImageView
+            android:id="@+id/image_next"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/mini_button_margin_end"
+            android:src="@drawable/skip_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_stop"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/mini_button_margin"
+            android:src="@drawable/pause"
+            app:layout_constraintBottom_toBottomOf="@+id/image_next"
+            app:layout_constraintEnd_toStartOf="@+id/image_next"
+            app:layout_constraintTop_toTopOf="@+id/image_next"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_prev"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/mini_button_margin"
+            android:src="@drawable/skip_previous"
+            app:layout_constraintBottom_toBottomOf="@+id/image_stop"
+            app:layout_constraintEnd_toStartOf="@+id/image_stop"
+            app:layout_constraintTop_toTopOf="@+id/image_stop"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
