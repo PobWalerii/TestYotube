@@ -9,19 +9,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.delivery.utils.*
 import com.example.testyoutube.databinding.FragmentVideoPlayBinding
-import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 
-//https://developer.alexanderklimov.ru/android/youtubeandroidplayerapi.php
+
+//https://github.com/PierfrancescoSoffritti/android-youtube-player#xml-attributes
+
 @AndroidEntryPoint
-class VideoPlayFragment : Fragment(){
+class VideoPlayFragment : Fragment() {
 
     private var _binding: FragmentVideoPlayBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<VideoPlayViewModel>()
-    lateinit var playerview: YouTubePlayerView
-    lateinit var youTubePlayer: YouTubePlayer
+    lateinit var youTubePlayerView: YouTubePlayerView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,12 +43,27 @@ class VideoPlayFragment : Fragment(){
         startUi()
         observeUiState()
         setupButtonClickListener()
+        initYoutubePlayerView()
+    }
+
+    private fun initYoutubePlayerView() {
+        youTubePlayerView = binding.youtubePlayerView
+        getLifecycle().addObserver(youTubePlayerView)
+        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                //setPlayNextVideoButtonClickListener(youTubePlayer)
+                //YouTubePlayerUtils.loadOrCueVideo(
+                //    youTubePlayer, lifecycle,
+                //    VideoIdsProvider.getNextVideoId(), 0f
+                //)
+            }
+        })
+
     }
 
     private fun startUi() {
-        playerview = binding.youtubeplayer
         viewModel.navigationVideo(0)
-        //playerview.initialize(API_KEY, YouTubePlayer.OnInitializedListener)
+        //lifecycle.addObserver(playerView as YouTubePlayerView)
     }
 
     private fun setupButtonClickListener() {
@@ -80,10 +98,6 @@ class VideoPlayFragment : Fragment(){
               }
             }
         }
-    }
-
-    fun getYouTubePlayerProvider(): YouTubePlayer.Provider? {
-        return binding.youtubeplayer as YouTubePlayerView?
     }
 
     override fun onDestroyView() {
