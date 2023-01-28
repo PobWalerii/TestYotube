@@ -6,8 +6,7 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Build
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -60,7 +59,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("setVisible")
     fun setVisible(view: View, isVisible: Boolean) {
-        view.visibility = if( isVisible ) VISIBLE else GONE
+        view.visibility = if( isVisible ) VISIBLE else INVISIBLE
     }
 
     @JvmStatic

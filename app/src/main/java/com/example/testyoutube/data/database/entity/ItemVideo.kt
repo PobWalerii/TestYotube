@@ -1,5 +1,6 @@
 package com.example.testyoutube.data.database.entity
 
+import android.text.Spanned
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,7 +15,7 @@ data class ItemVideo(
     val imageUrl: String,
     val imageWidth: Int,
     val imageHeight: Int,
-    val imageDefaultUrl: String,
-    val imageDefaultWidth: Int,
-    val imageDefaultHeight: Int
+    val imageHightUrl: String,
+    val imageHightWidth: Int,
+    val imageHightHeight: Int
 )

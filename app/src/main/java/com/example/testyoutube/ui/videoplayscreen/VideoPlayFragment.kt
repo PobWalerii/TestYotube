@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.delivery.utils.*
 import com.example.testyoutube.R
 import com.example.testyoutube.databinding.FragmentVideoPlayBinding
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
@@ -33,10 +36,45 @@ class VideoPlayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startUi()
+        observeUiState()
+        setupButtonClickListener()
     }
 
     private fun startUi() {
-        binding.item = viewModel.getCurrentVideo()
+        viewModel.navigationVideo(0)
+    }
+
+    private fun setupButtonClickListener() {
+        binding.collapse.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        binding.imagePrev.setOnClickListener {
+            viewModel.navigationVideo(-1)
+        }
+        binding.imageNext.setOnClickListener {
+            viewModel.navigationVideo(1)
+        }
+        binding.imagePlay.setOnClickListener {
+            binding.play = true
+        }
+        binding.imageStop.setOnClickListener {
+            binding.play = false
+        }
+
+    }
+
+    private fun observeUiState() {
+        viewModel.state.observe(viewLifecycleOwner, ::handleItemUiState)
+    }
+
+    private fun handleItemUiState(state: ItemUiState) {
+        when (state) {
+            is ExchangeItem -> {
+              state.data.apply {
+                  binding.item = this
+              }
+            }
+        }
     }
 
     override fun onDestroyView() {

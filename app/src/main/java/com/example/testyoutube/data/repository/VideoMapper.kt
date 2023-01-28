@@ -1,5 +1,6 @@
 package com.example.testyoutube.data.repository
 
+import androidx.core.text.HtmlCompat
 import com.example.testyoutube.data.apimodel.YoutubeResponse
 import com.example.testyoutube.data.database.entity.ItemVideo
 
@@ -14,8 +15,8 @@ class VideoMapper(
                 ItemVideo(
                     ii++,
                     item.id.videoId,
-                    item.snippet.channelTitle,
-                    item.snippet.title,
+                    HtmlCompat.fromHtml(item.snippet.channelTitle, HtmlCompat.FROM_HTML_MODE_LEGACY).toString(),
+                    HtmlCompat.fromHtml(item.snippet.title, HtmlCompat.FROM_HTML_MODE_LEGACY).toString(),
                     item.snippet.description,
                     item.snippet.thumbnails.medium.url,
                     item.snippet.thumbnails.medium.width,

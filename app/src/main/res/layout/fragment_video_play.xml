@@ -8,7 +8,9 @@
         <variable
             name="item"
             type="com.example.testyoutube.data.database.entity.ItemVideo" />
-
+        <variable
+            name="play"
+            type="Boolean" />
 
     </data>
 
@@ -20,7 +22,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:background="@color/appbar"
@@ -31,9 +33,9 @@
 
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/collapse"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/video_fragment_ico_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,40 +58,50 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/video_container"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@color/scrback"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            tools:ignore="MissingConstraints"
-            android:orientation="vertical">
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImage='@{item}'
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="@dimen/video_fragmen_title_margin"
             android:layout_marginStart="@dimen/video_fragment_text_margin"
+            android:layout_marginTop="@dimen/video_fragmen_title_margin"
             android:layout_marginEnd="@dimen/video_fragment_text_margin"
+            android:gravity="center_horizontal"
             android:text="@{item.title}"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/video_fragment_title_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/video_container" />
 
         <TextView
             android:id="@+id/textChannelTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/video_fragmen_channel_margin"
             android:layout_marginStart="@dimen/video_fragment_text_margin"
+            android:layout_marginTop="@dimen/video_fragmen_channel_margin"
             android:layout_marginEnd="@dimen/video_fragment_text_margin"
             android:gravity="center_horizontal"
             android:text="@{item.channelTitle}"
@@ -101,7 +113,51 @@
             app:layout_constraintTop_toBottomOf="@+id/textTitle" />
 
 
+        <ImageView
+            android:id="@+id/image_next"
+            android:layout_width="@dimen/video_fragment_control_size"
+            android:layout_height="@dimen/video_fragment_control_size"
+            android:layout_marginStart="@dimen/video_fragment_control_margin"
+            android:src="@drawable/skip_next"
+            app:layout_constraintBottom_toBottomOf="@+id/image_stop"
+            app:layout_constraintStart_toEndOf="@+id/image_stop"
+            app:layout_constraintTop_toTopOf="@+id/image_stop"
+            tools:ignore="ContentDescription" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/image_stop"
+            android:layout_width="@dimen/video_fragment_control_size"
+            android:layout_height="@dimen/video_fragment_control_size"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/pause"
+            app:setVisible="@{play}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_play"
+            android:layout_width="@dimen/video_fragment_control_size"
+            android:layout_height="@dimen/video_fragment_control_size"
+            android:src="@drawable/play"
+            app:setVisible="@{!play}"
+            app:layout_constraintTop_toTopOf="@+id/image_stop"
+            app:layout_constraintStart_toStartOf="@+id/image_stop"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_prev"
+            android:layout_width="@dimen/video_fragment_control_size"
+            android:layout_height="@dimen/video_fragment_control_size"
+            android:layout_marginEnd="@dimen/video_fragment_control_margin"
+            android:src="@drawable/skip_previous"
+            app:layout_constraintBottom_toBottomOf="@+id/image_stop"
+            app:layout_constraintEnd_toStartOf="@+id/image_stop"
+            app:layout_constraintTop_toTopOf="@+id/image_stop"
+            tools:ignore="ContentDescription" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -175,7 +175,9 @@ class YoutubeScreenFragment : Fragment() {
             is ListFromBase -> {
                 state.data.apply {
                 //Toast.makeText(context, "ListFromBase", Toast.LENGTH_SHORT).show()
-                    refreshUi(this)
+                    if(this.size!=0) {
+                        refreshUi(this)
+                    }
                     viewModel.isBaseLoaded = true
                 }
             }

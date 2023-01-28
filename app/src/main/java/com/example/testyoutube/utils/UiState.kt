@@ -9,3 +9,4 @@ sealed class ListUiState
     data class ListLoading(val isLoading: Boolean) : ListUiState()
     data class ListError(val message: String?) : ListUiState()
 
+
