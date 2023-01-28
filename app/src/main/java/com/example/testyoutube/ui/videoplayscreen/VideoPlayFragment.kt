@@ -1,25 +1,27 @@
 package com.example.testyoutube.ui.videoplayscreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.delivery.utils.*
-import com.example.testyoutube.R
 import com.example.testyoutube.databinding.FragmentVideoPlayBinding
-import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
-import com.example.testyoutube.ui.youtubescreen.VideoListViewModel
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 
+//https://developer.alexanderklimov.ru/android/youtubeandroidplayerapi.php
 @AndroidEntryPoint
-class VideoPlayFragment : Fragment() {
+class VideoPlayFragment : Fragment(){
+
     private var _binding: FragmentVideoPlayBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<VideoPlayViewModel>()
+    lateinit var playerview: YouTubePlayerView
+    lateinit var youTubePlayer: YouTubePlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,9 @@ class VideoPlayFragment : Fragment() {
     }
 
     private fun startUi() {
+        playerview = binding.youtubeplayer
         viewModel.navigationVideo(0)
+        //playerview.initialize(API_KEY, YouTubePlayer.OnInitializedListener)
     }
 
     private fun setupButtonClickListener() {
@@ -72,9 +76,14 @@ class VideoPlayFragment : Fragment() {
             is ExchangeItem -> {
               state.data.apply {
                   binding.item = this
+                  viewModel.currentId = this.videoId
               }
             }
         }
+    }
+
+    fun getYouTubePlayerProvider(): YouTubePlayer.Provider? {
+        return binding.youtubeplayer as YouTubePlayerView?
     }
 
     override fun onDestroyView() {

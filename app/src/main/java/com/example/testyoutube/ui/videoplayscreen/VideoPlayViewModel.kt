@@ -19,6 +19,8 @@ class VideoPlayViewModel @Inject constructor(
     private var _state: MutableLiveData<ItemUiState> = MutableLiveData()
     val state: LiveData<ItemUiState> = _state
 
+    var currentId: String = ""
+
     fun navigationVideo(bias: Int) {
         viewModelScope.launch {
             exchange
