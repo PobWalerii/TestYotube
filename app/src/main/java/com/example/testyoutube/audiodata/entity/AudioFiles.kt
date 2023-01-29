@@ -1,4 +1,4 @@
-package com.example.testyoutube.data.audiodata
+package com.example.testyoutube.audiodata.entity
 
 data class AudioFiles(
     val filePatch: String,

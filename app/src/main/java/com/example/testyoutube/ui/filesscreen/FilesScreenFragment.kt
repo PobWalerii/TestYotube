@@ -1,26 +1,27 @@
 package com.example.testyoutube.ui.filesscreen
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.testyoutube.data.audiodata.AudioFiles
 import com.example.testyoutube.databinding.FragmentFilesScreenBinding
+import com.example.testyoutube.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 
 //https://riptutorial.com/android/example/23916/fetch-audio-mp3-files-from-specific-folder-of-device-or-fetch-all-files
 //android kotlin mp3 files in directory
 //https://developer.android.com/training/data-storage/shared/media
 
+@AndroidEntryPoint
 class FilesScreenFragment : Fragment() {
 
     private var _binding: FragmentFilesScreenBinding? = null
     private val binding get() = _binding!!
+    private val viewModel by viewModels<FilesListViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,13 +39,40 @@ class FilesScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startUI()
+        observeUiState()
         setOnMenuClickListener()
     }
 
+    private fun observeUiState() {
+        viewModel.state.observe(viewLifecycleOwner, ::handleUiState)
+    }
+
+    private fun handleUiState(state: AudioUiState) {
+        when (state) {
+            is AudioListError -> {
+                Toast.makeText(
+                    requireContext(), state.message, Toast.LENGTH_SHORT
+                ).show()
+            }
+            is AudioListLoaded -> {
+                Toast.makeText(context,"Loaded",Toast.LENGTH_LONG).show()
+                state.data.apply {
+                    val list = this
+                    Toast.makeText(context,"$list",Toast.LENGTH_LONG).show()
+                    binding.count.text = "${list.size}"
+                    //refreshUi(this)
+                }
+            }
+            is AudioListLoading -> {
+                binding.visibleProgress = state.isLoading
+            }
+        }
+    }
+
+
     private fun startUI() {
         binding.bottomBar.active = 2
-        val list: List<AudioFiles> = getAllAudioFromDevice()
-        binding.count.text = "${list.size}"
+        viewModel.getAllAudioFromDevice(requireContext())
     }
 
     private fun setOnMenuClickListener() {
@@ -58,36 +86,5 @@ class FilesScreenFragment : Fragment() {
         _binding = null
     }
 
-    private fun getAllAudioFromDevice(): List<AudioFiles> {
-
-        val audioList: MutableList<AudioFiles> = mutableListOf()
-        val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val projection = arrayOf(
-            MediaStore.Audio.AudioColumns.DATA,
-            MediaStore.Audio.AudioColumns.TITLE,
-            MediaStore.Audio.AudioColumns.ALBUM,
-            MediaStore.Audio.ArtistColumns.ARTIST
-        )
-        val cursor = context?.contentResolver?.query(
-            uri,
-            projection,
-            MediaStore.Audio.Media.DATA + " like ? ",
-            arrayOf("%utm%"),
-            null
-        )
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                val file = AudioFiles(
-                    cursor.getString(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3)
-                )
-                audioList.add(file)
-            }
-            cursor.close()
-        }
-        return audioList
-    }
 
 }

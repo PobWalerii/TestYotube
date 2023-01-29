@@ -1,5 +1,6 @@
 package com.example.testyoutube.di
 
+import com.example.testyoutube.audiodata.repository.AudioRepository
 import com.example.testyoutube.data.api.ApiService
 import com.example.testyoutube.data.database.dao.VideoDao
 import com.example.testyoutube.data.repository.VideoRepository
@@ -17,6 +18,12 @@ object RepositoryModule {
     @Provides
     fun provideVideoRepository(apiService: ApiService, videoDao: VideoDao): VideoRepository {
         return VideoRepository(apiService, videoDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAudioRepository(): AudioRepository {
+        return AudioRepository()
     }
 
 }
