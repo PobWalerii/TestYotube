@@ -1,7 +1,7 @@
 package com.example.testyoutube.data.exchange
 
-import com.example.delivery.utils.ItemState
 import com.example.testyoutube.data.database.entity.ItemVideo
+import com.example.testyoutube.utils.ItemState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

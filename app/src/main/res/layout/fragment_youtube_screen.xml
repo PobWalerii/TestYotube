@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/scrback"
-        tools:context=".ui.youtubescreen.YoutubeScreenFragment">
+        tools:context=".ui.videolistscreen.VideoListFragment">
 
         <include
             android:id="@+id/appBarLayout"

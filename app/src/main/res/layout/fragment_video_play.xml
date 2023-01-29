@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="item"
             type="com.example.testyoutube.data.database.entity.ItemVideo" />
@@ -14,7 +13,6 @@
         <variable
             name="idVideo"
             type="Long" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +20,6 @@
         android:layout_height="match_parent"
         android:background="@color/appbar"
         tools:context=".ui.videoplayscreen.VideoPlayFragment">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/appBarLayout"
@@ -33,7 +30,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints">
-
 
             <ImageView
                 android:id="@+id/collapse"
@@ -75,8 +71,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 setVisible="@{play}"
-                app:enableAutomaticInitialization="false"
-                app:handleNetworkEvents="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +122,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textTitle" />
 
-
         <ImageView
             android:id="@+id/image_next"
             android:layout_width="@dimen/video_fragment_control_size"
@@ -172,7 +165,6 @@
             app:layout_constraintEnd_toStartOf="@+id/image_stop"
             app:layout_constraintTop_toTopOf="@+id/image_stop"
             tools:ignore="ContentDescription" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

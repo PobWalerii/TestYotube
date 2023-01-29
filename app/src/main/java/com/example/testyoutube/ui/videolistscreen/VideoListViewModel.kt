@@ -1,13 +1,13 @@
-package com.example.testyoutube.ui.youtubescreen
+package com.example.testyoutube.ui.videolistscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.delivery.utils.*
 import com.example.testyoutube.data.repository.VideoRepository
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.data.exchange.VideoExchange
+import com.example.testyoutube.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

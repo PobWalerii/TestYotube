@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/youtubeScreenFragment"
-        android:name="com.example.testyoutube.ui.youtubescreen.YoutubeScreenFragment"
+        android:name="com.example.testyoutube.ui.videolistscreen.VideoListFragment"
         android:label="fragment_youtube_screen"
         tools:layout="@layout/fragment_youtube_screen" >
         <action

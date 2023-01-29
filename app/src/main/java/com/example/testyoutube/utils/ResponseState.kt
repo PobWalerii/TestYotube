@@ -1,4 +1,4 @@
-package com.example.delivery.utils
+package com.example.testyoutube.utils
 
 sealed class ResponseState<T> (val data: T? = null, val message: String? = null){
     class Success<T>(data: T?) : ResponseState<T>(data)

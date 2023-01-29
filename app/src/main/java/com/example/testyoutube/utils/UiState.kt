@@ -1,7 +1,6 @@
-package com.example.delivery.utils
+package com.example.testyoutube.utils
 
 import com.example.testyoutube.data.database.entity.ItemVideo
-
 
 sealed class ListUiState
     data class ListLoaded(val data: List<ItemVideo>) : ListUiState()
