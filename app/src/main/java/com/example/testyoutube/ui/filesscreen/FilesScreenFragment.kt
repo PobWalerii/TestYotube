@@ -12,17 +12,12 @@ import com.example.testyoutube.databinding.FragmentFilesScreenBinding
 import com.example.testyoutube.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
-//https://riptutorial.com/android/example/23916/fetch-audio-mp3-files-from-specific-folder-of-device-or-fetch-all-files
-//android kotlin mp3 files in directory
-//https://developer.android.com/training/data-storage/shared/media
-
 @AndroidEntryPoint
 class FilesScreenFragment : Fragment() {
 
     private var _binding: FragmentFilesScreenBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<FilesListViewModel>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,37 +33,34 @@ class FilesScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startUI()
         observeUiState()
+        startUI()
         setOnMenuClickListener()
     }
 
     private fun observeUiState() {
-        viewModel.state.observe(viewLifecycleOwner, ::handleUiState)
+        viewModel.state.observe(viewLifecycleOwner, ::handleAudioUiState)
     }
 
-    private fun handleUiState(state: AudioUiState) {
+    private fun handleAudioUiState(state: AudioUiState) {
         when (state) {
-            is AudioListError -> {
+            is AudioError -> {
                 Toast.makeText(
                     requireContext(), state.message, Toast.LENGTH_SHORT
                 ).show()
             }
-            is AudioListLoaded -> {
+            is AudioLoaded -> {
                 Toast.makeText(context,"Loaded",Toast.LENGTH_LONG).show()
                 state.data.apply {
                     val list = this
                     Toast.makeText(context,"$list",Toast.LENGTH_LONG).show()
-                    binding.count.text = "${list.size}"
-                    //refreshUi(this)
                 }
             }
-            is AudioListLoading -> {
+            is AudioLoading -> {
                 binding.visibleProgress = state.isLoading
             }
         }
     }
-
 
     private fun startUI() {
         binding.bottomBar.active = 2

@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.testyoutube.bindingadapter
 
 import android.annotation.SuppressLint

@@ -8,11 +8,9 @@
         <variable
             name="visibleProgress"
             type="Boolean" />
-
         <variable
             name="responseSize"
             type="Integer" />
-
         <variable
             name="searchText"
             type="String" />

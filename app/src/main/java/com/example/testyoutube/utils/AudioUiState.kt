@@ -1,10 +1,8 @@
 package com.example.testyoutube.utils
 
-import com.example.testyoutube.audiodata.entity.AudioFiles
+import com.example.testyoutube.audiodata.entity.ItemAudio
 
 sealed class AudioUiState
-    data class AudioListLoaded(val data: List<AudioFiles>) : AudioUiState()
-    data class AudioListLoading(val isLoading: Boolean) : AudioUiState()
-    data class AudioListError(val message: String?) : AudioUiState()
-
-
+    data class AudioLoaded(val data: List<ItemAudio>) : AudioUiState()
+    data class AudioLoading(val isLoading: Boolean) : AudioUiState()
+    data class AudioError(val message: String?) : AudioUiState()

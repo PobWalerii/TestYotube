@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="UnusedAttribute" />
-<!--            android:drawableTint="@color/appbar"-->
+
         <Button
             android:id="@+id/files"
             style="@android:style/Widget.Toolbar.Button.Navigation"

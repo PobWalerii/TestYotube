@@ -1,12 +1,11 @@
 package com.example.testyoutube.ui.filesscreen
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testyoutube.audiodata.entity.AudioFiles
+import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.audiodata.repository.AudioRepository
 import com.example.testyoutube.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,19 +28,20 @@ class FilesListViewModel @Inject constructor(
         }
     }
 
-    private fun handleAudioResponse(resourse: AudioListState<List<AudioFiles>>) {
+    private fun handleAudioResponse(resourse: AudioListState<List<ItemAudio>>) {
         when (resourse) {
             is AudioListState.Error -> {
-                _state.value = AudioListError(resourse.message)
+                _state.value = AudioError(resourse.message)
             }
             is AudioListState.Loading -> {
-                _state.value = AudioListLoading(resourse.isLoading)
+                _state.value = AudioLoading(resourse.isLoading)
             }
             is AudioListState.Success -> {
-                _state.value = AudioListLoaded(resourse.data ?: emptyList())
+                _state.value = AudioLoaded(resourse.data ?: emptyList())
             }
         }
     }
+
 
 
 
