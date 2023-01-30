@@ -50,7 +50,6 @@ class FilesScreenFragment : Fragment() {
                 ).show()
             }
             is AudioLoaded -> {
-                Toast.makeText(context,"Loaded",Toast.LENGTH_LONG).show()
                 state.data.apply {
                     val list = this
                     Toast.makeText(context,"$list",Toast.LENGTH_LONG).show()

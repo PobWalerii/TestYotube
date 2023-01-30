@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.databinding.FragmentYoutubeScreenBinding
+import com.example.testyoutube.ui.videoplayscreen.VideoPlayViewModel
 import com.example.testyoutube.utils.*
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
@@ -25,6 +26,7 @@ class VideoListFragment : Fragment() {
     private var _binding: FragmentYoutubeScreenBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<VideoListViewModel>()
+    private val playViewModel by viewModels<VideoPlayViewModel>()
     private lateinit var horisontalAdapter: HorisontalListAdapter
     private lateinit var verticalAdapter: VerticalListAdapter
     private lateinit var horisontalRecyclerView: RecyclerView
@@ -45,37 +47,64 @@ class VideoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startUI()
         setupRecyclers()
         observeUiState()
+        observeListState()
         setOnMenuClickListener()
         setOnSearchClickListener()
         setupItemClickListener()
         setItemNavigationListener()
         startVideoListener()
+        startUI()
+    }
+
+    private fun observeListState() {
+        playViewModel.state.observe(viewLifecycleOwner, ::handleItemUiState)
+    }
+    private fun handleItemUiState(state: ItemUiState) {
+        when (state) {
+            is ExchangeItem -> {
+                state.data.apply {
+                    miniPlayerSetItem(this)
+                    refreshRecyclers(this)
+                }
+            }
+        }
+    }
+
+    private fun refreshRecyclers(current: ItemVideo) {
+        var position = verticalAdapter.getItemPosition(current)
+        verticalRecyclerView.layoutManager?.scrollToPosition(position)
+        position = horisontalAdapter.getItemPosition(current)
+        if(position != -1) {
+            horisontalRecyclerView.layoutManager?.scrollToPosition(position)
+        }
     }
 
     private fun setupItemClickListener() {
         horisontalAdapter.setOnItemClickListener(object : HorisontalListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemVideo) {
-                miniPlayerSetItem(current)
+                exchangeCurrentItem(current)
             }
         })
         verticalAdapter.setOnItemClickListener(object : VerticalListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemVideo) {
-                miniPlayerSetItem(current)
+                exchangeCurrentItem(current)
             }
         })
     }
 
-    private fun miniPlayerSetItem(current: ItemVideo) {
+    private fun exchangeCurrentItem(current: ItemVideo) {
         viewModel.setCurrentVideo(current)
+        playViewModel.navigationVideo(0)
+    }
+
+    private fun miniPlayerSetItem(current: ItemVideo) {
         with (binding.miniPlayer) {
             image = current.imageUrl
             channel = current.channelTitle
             title = current.title
         }
-
     }
 
     private fun setupAdapters() {
@@ -102,9 +131,34 @@ class VideoListFragment : Fragment() {
             val keyWord = startResponse ?: default
             viewModel.keyWord = keyWord
             getVideoFromDatabase()
-            //getVideoList(keyWord)
+            getVideoList(keyWord)
             viewModel.isStarted = true
+        } else {
+            playViewModel.navigationVideo(0)
+            binding.responseSize = viewModel.getSizeVideoList()
+            binding.searchText = viewModel.keyWord
         }
+    }
+
+    private fun refreshUi(list: List<ItemVideo>) {
+        viewModel.setCurrentList(list)
+        horisontalAdapter.setList(list.take(COUNT_HORIZONTAL_ITEMS))
+        verticalAdapter.setList(list)
+        val keyWord = viewModel.keyWord
+        binding.responseSize = list.size
+        binding.searchText = keyWord
+        saveSearhText(keyWord)
+        if(list.isNotEmpty()) {
+            viewModel.setCurrentVideo(list[0])
+            playViewModel.navigationVideo(0)
+        }
+    }
+
+    private fun getVideoList(keyWord: String) {
+        viewModel.getVideoList(keyWord)
+    }
+    private fun getVideoFromDatabase() {
+        viewModel.getVideoFromDatabase()
     }
 
     private fun setOnSearchClickListener() {
@@ -119,13 +173,6 @@ class VideoListFragment : Fragment() {
         }
     }
 
-    private fun getVideoList(keyWord: String) {
-        viewModel.getVideoList(keyWord)
-    }
-    private fun getVideoFromDatabase() {
-        viewModel.getVideoFromDatabase()
-    }
-
     private fun setOnMenuClickListener() {
         binding.bottomBar.files.setOnClickListener {
             findNavController().navigate(
@@ -135,10 +182,13 @@ class VideoListFragment : Fragment() {
     }
     private fun startVideoListener() {
         binding.miniPlayer.miniPlayerContainer.setOnClickListener {
-            findNavController().navigate(
-                VideoListFragmentDirections.actionYoutubeScreenFragmentToVideoPlayFragment()
-            )
+            startVideoFragment()
         }
+    }
+
+    private fun startVideoFragment() {
+        findNavController().navigate(
+            VideoListFragmentDirections.actionYoutubeScreenFragmentToVideoPlayFragment())
     }
 
     private fun observeUiState() {
@@ -171,40 +221,15 @@ class VideoListFragment : Fragment() {
         }
     }
 
-    private fun refreshUi(list: List<ItemVideo>) {
-        viewModel.setCurrentList(list)
-        horisontalAdapter.setList(list.take(COUNT_HORIZONTAL_ITEMS))
-        verticalAdapter.setList(list)
-        val keyWord = viewModel.keyWord
-        binding.responseSize = list.size
-        binding.searchText = keyWord
-        saveSearhText(keyWord)
-        //****************************************************************************
-        if(viewModel.getCurrentVideo() == null) {
-            viewModel.setCurrentVideo(list[0])
-        }
-        refreshPlayer(0)
-        miniPlayerSetItem(viewModel.getCurrentVideo() ?: list[0])
-    }
-
     private fun setItemNavigationListener() {
         binding.miniPlayer.imageNext.setOnClickListener {
-            refreshPlayer(1)
+            playViewModel.navigationVideo(1)
         }
         binding.miniPlayer.imagePrev.setOnClickListener {
-            refreshPlayer(-1)
+            playViewModel.navigationVideo(-1)
         }
-    }
-
-    private fun refreshPlayer(bias: Int) {
-        val position = verticalAdapter.getPosition(viewModel.getCurrentVideo(), bias)
-        if(position != -1) {
-            val item: ItemVideo = verticalAdapter.getItemFromPosition(position)
-            verticalRecyclerView.layoutManager?.scrollToPosition(position)
-            if (position < COUNT_HORIZONTAL_ITEMS) {
-                horisontalRecyclerView.layoutManager?.scrollToPosition(position)
-            }
-            miniPlayerSetItem(item)
+        binding.miniPlayer.imagePlay.setOnClickListener {
+            startVideoFragment()
         }
     }
 

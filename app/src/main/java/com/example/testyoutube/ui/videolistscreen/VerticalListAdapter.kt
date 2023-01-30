@@ -58,23 +58,7 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
 
     override fun getItemCount(): Int = listVideo.size
     override fun getItemId(position: Int): Long = listVideo[position].id
-
-    private fun getItemPosition(item: ItemVideo?): Int = listVideo.indexOf(item)
-
-    fun getItemFromPosition(position: Int): ItemVideo = listVideo[position]
-
-    //fun setCurrentId(current: Long ) {
-    //    currentId = current
-    //}
-    //fun getCurrentId(): Long = currentId
-
-    fun getPosition(item: ItemVideo?, bias: Int): Int {
-        var position = getItemPosition(item) + bias
-        if(position<0 || position+1>listVideo.size) {
-            position = -1
-        }
-        return position
-    }
+    fun getItemPosition(item: ItemVideo?): Int = listVideo.indexOf(item)
 
 
     @SuppressLint("NotifyDataSetChanged")

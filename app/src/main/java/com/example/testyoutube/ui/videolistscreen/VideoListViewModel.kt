@@ -28,7 +28,8 @@ class VideoListViewModel @Inject constructor(
     fun setCurrentVideo(item: ItemVideo) {
         exchange.setCurrentVideo(item)
     }
-    fun getCurrentVideo(): ItemVideo? = exchange.getCurrentVideo()
+
+    fun getSizeVideoList() = exchange.getSizeList()
 
     fun setCurrentList(list: List<ItemVideo>) {
         exchange.setCurrentList(list)

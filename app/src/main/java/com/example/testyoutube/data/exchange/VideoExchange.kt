@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class VideoExchange {
-    var currentItem: ItemVideo? = null
-    var listVideo: List<ItemVideo> = emptyList()
+    private var currentItem: ItemVideo? = null
+    private var listVideo: List<ItemVideo> = emptyList()
 
     fun setCurrentVideo(item: ItemVideo) {
         currentItem = item
     }
-    fun getCurrentVideo(): ItemVideo? = currentItem
 
     fun setCurrentList(list: List<ItemVideo>) {
         listVideo = list
     }
+    fun getSizeList() = listVideo.size
 
     fun navigationVideo(bias: Int): Flow<ItemState<ItemVideo>> {
         return flow {

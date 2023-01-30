@@ -64,7 +64,7 @@ object BindingAdapter {
     @BindingAdapter("firstText","firstSize","firstLoad")
     fun TextView.setFirstTitle(firstText: String?, firstSize: Int, firstLoad: Boolean) {
         this.text =
-            if (firstLoad || firstSize==0) {
+            if (firstLoad) {
                 this.context.getString(R.string.loading)
             } else {
                 if (firstSize < COUNT_HORIZONTAL_ITEMS) {
@@ -79,7 +79,7 @@ object BindingAdapter {
     @BindingAdapter("secondText","secondSize","secondLoad")
     fun TextView.setSecondTitle(secondText: String?, secondSize: Int, secondLoad: Boolean) {
         this.text =
-            if(secondLoad || secondSize == 0) {
+            if(secondLoad) {
                 this.context.getString(R.string.loading)
             } else {
                 if (secondSize < COUNT_HORIZONTAL_ITEMS) {
