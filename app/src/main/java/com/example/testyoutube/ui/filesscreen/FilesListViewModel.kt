@@ -1,6 +1,5 @@
 package com.example.testyoutube.ui.filesscreen
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,10 +19,10 @@ class FilesListViewModel @Inject constructor(
     private var _state: MutableLiveData<AudioUiState> = MutableLiveData()
     val state: LiveData<AudioUiState> = _state
 
-    fun getAllAudioFromDevice(context: Context) {
+    fun getAllAudioFromDevice() {
         viewModelScope.launch {
             audioRepository
-                .getAllAudioFromDevice(context)
+                .getAllAudioFromDevice()
                 .collect(::handleAudioResponse)
         }
     }

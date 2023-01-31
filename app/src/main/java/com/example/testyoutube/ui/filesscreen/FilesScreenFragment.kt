@@ -1,19 +1,25 @@
 package com.example.testyoutube.ui.filesscreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.testyoutube.audiodata.repository.AudioRepository
 import com.example.testyoutube.databinding.FragmentFilesScreenBinding
-import com.example.testyoutube.utils.*
+import com.example.testyoutube.utils.AudioError
+import com.example.testyoutube.utils.AudioLoaded
+import com.example.testyoutube.utils.AudioLoading
+import com.example.testyoutube.utils.AudioUiState
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FilesScreenFragment : Fragment() {
+    @Inject lateinit var audioRepository: AudioRepository
 
     private var _binding: FragmentFilesScreenBinding? = null
     private val binding get() = _binding!!
@@ -28,6 +34,7 @@ class FilesScreenFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFilesScreenBinding.inflate(inflater, container, false)
+        audioRepository.context = this.context
         return binding.root
     }
 
@@ -63,7 +70,7 @@ class FilesScreenFragment : Fragment() {
 
     private fun startUI() {
         binding.bottomBar.active = 2
-        viewModel.getAllAudioFromDevice(requireContext())
+        viewModel.getAllAudioFromDevice()
     }
 
     private fun setOnMenuClickListener() {
