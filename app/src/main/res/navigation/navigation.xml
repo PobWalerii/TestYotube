@@ -11,11 +11,11 @@
         android:label="fragment_youtube_screen"
         tools:layout="@layout/fragment_youtube_screen" >
         <action
-            android:id="@+id/action_youtubeScreenFragment_to_filesScreenFragment"
-            app:destination="@id/filesScreenFragment" />
-        <action
             android:id="@+id/action_youtubeScreenFragment_to_videoPlayFragment"
             app:destination="@id/videoPlayFragment" />
+        <action
+            android:id="@+id/action_youtubeScreenFragment_to_permissionsFragment"
+            app:destination="@id/permissionsFragment" />
     </fragment>
     <fragment
         android:id="@+id/filesScreenFragment"
@@ -26,4 +26,13 @@
         android:id="@+id/videoPlayFragment"
         android:name="com.example.testyoutube.ui.videoplayscreen.VideoPlayFragment"
         android:label="VideoPlayFragment" />
+    <dialog
+        android:id="@+id/permissionsFragment"
+        android:name="com.example.testyoutube.ui.permissions.PermissionsFragment"
+        android:label="fragment_permissions"
+        tools:layout="@layout/fragment_permissions" >
+        <action
+            android:id="@+id/action_permissionsFragment_to_filesScreenFragment"
+            app:destination="@id/filesScreenFragment" />
+    </dialog>
 </navigation>

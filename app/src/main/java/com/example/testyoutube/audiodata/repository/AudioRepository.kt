@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import android.widget.Toast
 import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.utils.AudioListState
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,7 @@ class AudioRepository {
             } catch (exception: Exception) {
                 emit(AudioListState.Error(exception.message ?: "Data loading error!"))
             }
-            emit(AudioListState.Loading(false))
+            //emit(AudioListState.Loading(false))
         }
     }
 
@@ -31,6 +32,7 @@ class AudioRepository {
     private fun responseAudio(context: Context?): List<ItemAudio> {
 
         val audioList = mutableListOf<ItemAudio>()
+
         val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = MediaStore.Audio.Media.IS_MUSIC + " != 0"
         val projections = arrayOf(
@@ -58,78 +60,65 @@ class AudioRepository {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    //if (file.name.endsWith(".mp3")) {
-                    val id: Long = cursor.getLong(
-                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
-                    )
-                    val contentUri = Uri.withAppendedPath(uri, id.toString()).toString()
-                    val path: String = cursor.getString(
-                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
-                    val album_id: Long = cursor.getLong(
-                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
-                    val sArtworkUri = Uri.parse("content://media/external/audio/albumart")
-                    val imageUri = Uri.withAppendedPath(sArtworkUri, album_id.toString())
+                    val name: String = cursor.getString(
+                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
+                    if (name.endsWith(".mp3")) {
+                        val id: Long = cursor.getLong(
+                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+                        )
 
-                    val audioContent = ItemAudio(
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(
-                                MediaStore.Audio.Media.DISPLAY_NAME)),
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(
-                                MediaStore.Audio.Media.TITLE)),
-                        id,
-                        contentUri,
-                        path,
+                        val contentUri = Uri.withAppendedPath(uri, id.toString()).toString()
+                        val path: String = cursor.getString(
+                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+                        )
+                        val album_id: Long = cursor.getLong(
+                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+                        )
+                        val sArtworkUri = Uri.parse("content://media/external/audio/albumart")
+                        val imageUri = Uri.withAppendedPath(sArtworkUri, album_id.toString())
 
-                        cursor.getLong(
-                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)),
+                        val audioContent = ItemAudio(
+                            name,
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(
+                                    MediaStore.Audio.Media.TITLE
+                                )
+                            ),
+                            id,
+                            contentUri,
+                            path,
 
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(
-                                MediaStore.Audio.Media.ALBUM)),
-                        cursor.getLong(
-                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)),
+                            cursor.getLong(
+                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
+                            ),
 
-                        imageUri,
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(
+                                    MediaStore.Audio.Media.ALBUM
+                                )
+                            ),
+                            cursor.getLong(
+                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                            ),
 
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)),
+                            imageUri,
 
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER)),
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+                            ),
 
-                        GetGenre(
-                            cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)))
-                    )
-                    audioList.add(audioContent)
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER)
+                            )
+                        )
+                        audioList.add(audioContent)
+                    }
                 } while (cursor.moveToNext())
             }
             cursor.close()
         }
         return audioList
     }
-
-
-    private fun GetGenre(media_id: Int): String? {
-        val genresProj = arrayOf(
-            MediaStore.Audio.Genres.NAME,
-            MediaStore.Audio.Genres._ID
-        )
-        val uri = MediaStore.Audio.Genres.getContentUriForAudioId("external", media_id)
-        val genresCursor: Cursor? =
-            context?.getContentResolver()?.query(uri, genresProj, null, null, null)
-        val genreIndex = genresCursor?.getColumnIndexOrThrow(MediaStore.Audio.Genres.NAME)
-        var genre: String? = ""
-        if(genresCursor!=null && genreIndex!=null) {
-            while (genresCursor.moveToNext()) {
-                genre = genresCursor.getString(genreIndex)
-            }
-        }
-        genresCursor?.close()
-        return genre
-    }
-
-
 
 
 }

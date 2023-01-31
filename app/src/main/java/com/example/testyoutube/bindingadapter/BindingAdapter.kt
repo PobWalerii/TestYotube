@@ -2,6 +2,7 @@ package com.example.testyoutube.bindingadapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.view.View.*
@@ -36,6 +37,14 @@ object BindingAdapter {
                 .centerCrop()
                 .into(imageView)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("loadImageAudio")
+    fun loadImageAudio(imageView: ImageView, image: String) {
+        Glide.with(imageView.context).load(image)
+            .placeholder(R.drawable.music_default)
+            .into(imageView)
     }
 
 

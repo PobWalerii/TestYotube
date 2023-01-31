@@ -13,7 +13,7 @@ data class ItemAudio(
     val art_uri: Uri? = null,
     val artist: String? = null,
     val composer: String? = null,
-    val genre: String? = null,
+
 
 
 
