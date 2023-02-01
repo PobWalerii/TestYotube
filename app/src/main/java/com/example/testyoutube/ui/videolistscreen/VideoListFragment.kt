@@ -131,7 +131,7 @@ class VideoListFragment : Fragment() {
             val keyWord = startResponse ?: default
             viewModel.keyWord = keyWord
             getVideoFromDatabase()
-            //getVideoList(keyWord)
+            getVideoList(keyWord)
             viewModel.isStarted = true
         } else {
             playViewModel.navigationVideo(0)

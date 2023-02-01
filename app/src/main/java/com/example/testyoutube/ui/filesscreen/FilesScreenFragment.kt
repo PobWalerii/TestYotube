@@ -22,8 +22,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FilesScreenFragment : Fragment() {
 
-    @Inject lateinit var audioRepository: AudioRepository
-
     private var _binding: FragmentFilesScreenBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<FilesListViewModel>()
@@ -41,7 +39,6 @@ class FilesScreenFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFilesScreenBinding.inflate(inflater, container, false)
-        audioRepository.context = this.context
         return binding.root
     }
 
@@ -114,10 +111,7 @@ class FilesScreenFragment : Fragment() {
                     }
                 }
             }
-            is AudioLoading -> {
-                binding.visibleProgress = state.isLoading
-            }
-        }
+         }
     }
 
     private fun startUI() {
@@ -129,6 +123,7 @@ class FilesScreenFragment : Fragment() {
     private fun setupItemClickListener() {
         adapter.setOnItemClickListener(object : AudioListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemAudio) {
+                pauseAudio()
                 exchangeCurrentItem(current)
             }
         })

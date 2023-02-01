@@ -8,23 +8,24 @@ import android.provider.MediaStore
 import android.widget.Toast
 import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.utils.AudioListState
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class AudioRepository {
-
-    var context: Context? = null
+class AudioRepository @Inject constructor(
+    @ApplicationContext
+    private val context: Context
+){
 
     fun getAllAudioFromDevice(): Flow<AudioListState<List<ItemAudio>>> {
         return flow {
-            //emit(AudioListState.Loading(true))
             try {
                 val list: List<ItemAudio> = responseAudio(context)
                 emit(AudioListState.Success(list))
             } catch (exception: Exception) {
                 emit(AudioListState.Error(exception.message ?: "Data loading error!"))
             }
-            //emit(AudioListState.Loading(false))
         }
     }
 

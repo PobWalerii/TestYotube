@@ -39,9 +39,6 @@ class FilesListViewModel @Inject constructor(
             is AudioListState.Error -> {
                 _state.value = AudioError(resourse.message)
             }
-            is AudioListState.Loading -> {
-                _state.value = AudioLoading(resourse.isLoading)
-            }
             is AudioListState.Success -> {
                 _state.value = AudioLoaded(resourse.data ?: emptyList())
             }
