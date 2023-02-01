@@ -2,7 +2,9 @@ package com.example.testyoutube.bindingadapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.view.View
 import android.view.View.*
@@ -17,6 +19,7 @@ import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 
+
 object BindingAdapter {
 
     @JvmStatic
@@ -30,7 +33,7 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("imageMini","imageAudio")
-    fun ImageView.loadImageMini(imageMini: String?, imageAudio: Boolean) {
+    fun ImageView.loadImageMini(imageMini: Any?, imageAudio: Boolean) {
         if(imageMini!=null) {
             Glide.with(this.context).load(imageMini)
                 .placeholder(if(imageAudio) R.drawable.audio else R.drawable.square)
@@ -41,7 +44,7 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("loadImageAudio")
-    fun loadImageAudio(imageView: ImageView, image: String) {
+    fun loadImageAudio(imageView: ImageView, image: Any?) {
         Glide.with(imageView.context).load(image)
             .placeholder(R.drawable.audio)
             .into(imageView)

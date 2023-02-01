@@ -3,9 +3,13 @@ package com.example.testyoutube.audiodata.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.core.net.toUri
 import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.utils.AudioListState
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -59,6 +63,7 @@ class AudioRepository @Inject constructor(
         )
 
         if (cursor != null) {
+            val mmr = MediaMetadataRetriever()
             if (cursor.moveToFirst()) {
                 do {
                     val name: String = cursor.getString(
@@ -72,9 +77,18 @@ class AudioRepository @Inject constructor(
                         val path: String = cursor.getString(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
                         )
+
+                        mmr.setDataSource(path)
+                        val artBytes =  mmr.getEmbeddedPicture()
+                        var bm: Bitmap?  = null
+                        if (artBytes!=null) {
+                            bm = BitmapFactory.decodeByteArray(artBytes, 0, artBytes.size)
+                        }
+
                         val album_id: Long = cursor.getLong(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
                         )
+
                         val sArtworkUri = Uri.parse("content://media/external/audio/albumart")
                         val imageUri = Uri.withAppendedPath(sArtworkUri, album_id.toString())
 
@@ -110,7 +124,8 @@ class AudioRepository @Inject constructor(
 
                             cursor.getString(
                                 cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER)
-                            )
+                            ),
+                            bm
                         )
                         audioList.add(audioContent)
                     }

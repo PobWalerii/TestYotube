@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="imageBitmap"
+            type="android.graphics.Bitmap" />
+        <variable
             name="image"
             type="String" />
         <variable
@@ -63,7 +66,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
-
+            <!--app:imageMini='@{isAudio ? imageBitmap : image}'-->
             <TextView
                 android:id="@+id/textTitle"
                 android:layout_width="0dp"

@@ -1,5 +1,6 @@
 package com.example.testyoutube.audiodata.entity
 
+import android.graphics.Bitmap
 import android.net.Uri
 data class ItemAudio(
     val name: String? = null,
@@ -13,7 +14,7 @@ data class ItemAudio(
     val art_uri: Uri? = null,
     val artist: String? = null,
     val composer: String? = null,
-
+    val image: Bitmap? = null
 
 
 

@@ -21,7 +21,6 @@
             android:id="@+id/border"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:alpha="0.5"
             android:src="@drawable/border_current"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,7 @@
                 android:layout_width="@dimen/audio_image_size"
                 android:layout_height="@dimen/audio_image_size"
                 android:background="@color/scrback"
-                app:loadImageAudio='@{item.art_uri.toString()}'
+                app:loadImageAudio='@{item.art_uri}'
                 tools:ignore="ContentDescription" />
         </androidx.cardview.widget.CardView>
 

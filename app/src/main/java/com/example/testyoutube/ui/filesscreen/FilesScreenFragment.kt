@@ -1,5 +1,6 @@
 package com.example.testyoutube.ui.filesscreen
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
@@ -67,10 +68,12 @@ class FilesScreenFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun refreshRecycler(current: ItemAudio) {
         val position = adapter.getItemPosition(current)
         adapter.setCurrentId(current)
         recyclerView.layoutManager?.scrollToPosition(position)
+        adapter.notifyDataSetChanged()
     }
 
     private fun miniPlayerSetItem(current: ItemAudio) {
@@ -124,7 +127,8 @@ class FilesScreenFragment : Fragment() {
         adapter.setOnItemClickListener(object : AudioListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemAudio) {
                 pauseAudio()
-                exchangeCurrentItem(current)
+                viewModel.setCurrentAudio(current)
+                miniPlayerSetItem(current)
             }
         })
     }
