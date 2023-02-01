@@ -1,5 +1,6 @@
 package com.example.testyoutube.di
 
+import com.example.testyoutube.audiodata.exchange.AudioExchange
 import com.example.testyoutube.data.exchange.VideoExchange
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,12 @@ object ExchangeModule {
     @Provides
     fun provideVideoExchange(): VideoExchange {
         return VideoExchange()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAudioExchange(): AudioExchange {
+        return AudioExchange()
     }
 
 }

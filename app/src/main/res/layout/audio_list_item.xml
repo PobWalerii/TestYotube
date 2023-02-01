@@ -17,22 +17,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/border"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha="0.5"
+            android:src="@drawable/border_current"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setVisible="@{item.musicId == current}"
+            tools:ignore="ContentDescription" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/card"
-            android:layout_width="@dimen/audio_image_size"
-            android:layout_height="@dimen/audio_image_size"
-            android:layout_marginTop="@dimen/audio_item_margin"
-            android:layout_marginStart="@dimen/audio_item_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/audio_item_margin"
+            android:backgroundTint="@color/scrback"
             app:cardCornerRadius="@dimen/image_corner_size"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/border"
+            app:layout_constraintBottom_toBottomOf="@+id/border">
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/appbar"
+                android:layout_width="@dimen/audio_image_size"
+                android:layout_height="@dimen/audio_image_size"
+                android:background="@color/scrback"
                 app:loadImageAudio='@{item.art_uri.toString()}'
                 tools:ignore="ContentDescription" />
         </androidx.cardview.widget.CardView>
@@ -47,7 +60,7 @@
             android:textSize="@dimen/audio_item_name_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/card"
-            app:layout_constraintTop_toTopOf="@+id/card" />
+            app:layout_constraintTop_toTopOf="@+id/border" />
 
         <TextView
             android:id="@+id/artist"

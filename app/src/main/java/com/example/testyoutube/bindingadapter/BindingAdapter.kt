@@ -29,13 +29,13 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("loadImageMini")
-    fun loadImageMini(imageView: ImageView, image: String?) {
-        if(image!=null) {
-            Glide.with(imageView.context).load(image)
-                .placeholder(R.drawable.square)
+    @BindingAdapter("imageMini","imageAudio")
+    fun ImageView.loadImageMini(imageMini: String?, imageAudio: Boolean) {
+        if(imageMini!=null) {
+            Glide.with(this.context).load(imageMini)
+                .placeholder(if(imageAudio) R.drawable.audio else R.drawable.square)
                 .centerCrop()
-                .into(imageView)
+                .into(this)
         }
     }
 
@@ -43,7 +43,7 @@ object BindingAdapter {
     @BindingAdapter("loadImageAudio")
     fun loadImageAudio(imageView: ImageView, image: String) {
         Glide.with(imageView.context).load(image)
-            .placeholder(R.drawable.music_default)
+            .placeholder(R.drawable.audio)
             .into(imageView)
     }
 
@@ -98,6 +98,7 @@ object BindingAdapter {
                 }
             }
     }
+
 
 }
 

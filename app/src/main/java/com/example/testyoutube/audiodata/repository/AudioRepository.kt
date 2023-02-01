@@ -17,7 +17,7 @@ class AudioRepository {
 
     fun getAllAudioFromDevice(): Flow<AudioListState<List<ItemAudio>>> {
         return flow {
-            emit(AudioListState.Loading(true))
+            //emit(AudioListState.Loading(true))
             try {
                 val list: List<ItemAudio> = responseAudio(context)
                 emit(AudioListState.Success(list))

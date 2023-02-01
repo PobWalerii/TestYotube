@@ -13,6 +13,12 @@
         <variable
             name="title"
             type="String" />
+        <variable
+            name="isAudio"
+            type="Boolean"/>
+        <variable
+            name="isPlay"
+            type="Boolean"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,9 +54,11 @@
                 android:id="@+id/imageView"
                 android:layout_width="@dimen/mini_image_size"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/mini_image_padding"
                 android:layout_marginTop="@dimen/mini_image_padding"
                 android:layout_marginBottom="@dimen/mini_image_padding"
-                app:loadImageMini='@{image}'
+                app:imageMini='@{image}'
+                app:imageAudio='@{isAudio}'
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -79,9 +87,9 @@
                 android:layout_marginEnd="@dimen/mini_player_text_margin"
                 android:maxLines="2"
                 android:text="@{channel}"
-                android:textAllCaps="true"
+                android:textAllCaps="@{!isAudio}"
                 android:textColor="@color/item_tytle_color"
-                android:textSize="@dimen/vertical_item_tytle_text_size"
+                android:textSize="@{isAudio ? @dimen/audio_item_artist_size : @dimen/vertical_item_tytle_text_size}"
                 app:layout_constraintEnd_toEndOf="@+id/border_player"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/textTitle" />
@@ -105,9 +113,22 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/mini_button_margin"
             android:src="@drawable/play"
+            app:setVisible="@{!isPlay}"
             app:layout_constraintBottom_toBottomOf="@+id/image_next"
             app:layout_constraintEnd_toStartOf="@+id/image_next"
             app:layout_constraintTop_toTopOf="@+id/image_next"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_stop"
+            android:layout_width="@dimen/mini_button_size"
+            android:layout_height="match_parent"
+            android:src="@drawable/pause"
+            app:setVisible="@{isPlay}"
+            app:layout_constraintBottom_toBottomOf="@+id/image_play"
+            app:layout_constraintStart_toStartOf="@+id/image_play"
+            app:layout_constraintTop_toTopOf="@+id/image_play"
+            app:layout_constraintEnd_toEndOf="@+id/image_play"
             tools:ignore="ContentDescription" />
 
         <ImageView

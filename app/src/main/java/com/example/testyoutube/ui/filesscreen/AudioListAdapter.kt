@@ -61,11 +61,16 @@ class AudioListAdapter : RecyclerView.Adapter<AudioListAdapter.ViewHolder>() {
     override fun getItemCount(): Int = listAudio.size
     override fun getItemId(position: Int): Long = listAudio[position].musicId
     fun getItemPosition(item: ItemAudio?): Int = listAudio.indexOf(item)
-
+    @SuppressLint("NotifyDataSetChanged")
+    fun setCurrentId(item: ItemAudio) {
+        currentId = item.musicId
+        notifyDataSetChanged()
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<ItemAudio>) {
         listAudio = list
+        currentId=list[0].musicId
         notifyDataSetChanged()
     }
 
