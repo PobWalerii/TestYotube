@@ -15,9 +15,4 @@ data class ItemAudio(
     val artist: String? = null,
     val composer: String? = null,
     val image: Bitmap? = null
-
-
-
-
-
 )

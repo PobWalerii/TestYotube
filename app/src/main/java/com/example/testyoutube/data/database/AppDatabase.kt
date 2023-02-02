@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.testyoutube.data.database.dao.VideoDao
 import com.example.testyoutube.data.database.entity.ItemVideo
 
-@Database(entities = [ItemVideo::class], version = 2, exportSchema = false)
+@Database(entities = [ItemVideo::class], version = 3, exportSchema = false)
 
 abstract class AppDatabase : RoomDatabase() {
     abstract fun videoDao(): VideoDao

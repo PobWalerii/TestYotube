@@ -38,7 +38,7 @@
     <dimen name="horisontal_item_channel_text_size">14sp</dimen>
     <dimen name="vertical_item_channel_text_size">12sp</dimen>
     <dimen name="horisontal_item_tytle_text_size">10sp</dimen>
-    <dimen name="vertical_item_tytle_text_size">8sp</dimen>
+    <dimen name="vertical_item_tytle_text_size">9sp</dimen>
 
     <dimen name="video_fragment_ico_margin">15dp</dimen>
     <dimen name="video_fragmen_title_margin">50dp</dimen>

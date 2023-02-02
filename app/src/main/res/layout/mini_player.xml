@@ -60,7 +60,7 @@
                 android:layout_marginStart="@dimen/mini_image_padding"
                 android:layout_marginTop="@dimen/mini_image_padding"
                 android:layout_marginBottom="@dimen/mini_image_padding"
-                app:imageMini='@{image}'
+                app:imageMini='@{isAudio ? imageBitmap : image}'
                 app:imageAudio='@{isAudio}'
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

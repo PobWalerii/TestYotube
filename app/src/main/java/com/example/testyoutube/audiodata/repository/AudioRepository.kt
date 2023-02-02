@@ -36,8 +36,6 @@ class AudioRepository @Inject constructor(
     @SuppressLint("InlinedApi")
     private fun responseAudio(context: Context?): List<ItemAudio> {
 
-        val audioList = mutableListOf<ItemAudio>()
-
         val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = MediaStore.Audio.Media.IS_MUSIC + " != 0"
         val projections = arrayOf(
@@ -62,69 +60,48 @@ class AudioRepository @Inject constructor(
             "LOWER (" + MediaStore.Audio.Media.TITLE + ") ASC"
         )
 
+        val audioList = mutableListOf<ItemAudio>()
         if (cursor != null) {
-            val mmr = MediaMetadataRetriever()
+
             if (cursor.moveToFirst()) {
+                val mmr = MediaMetadataRetriever()
                 do {
                     val name: String = cursor.getString(
                         cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME))
+
                     if (name.endsWith(".mp3")) {
                         val id: Long = cursor.getLong(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
                         )
-
                         val contentUri = Uri.withAppendedPath(uri, id.toString()).toString()
                         val path: String = cursor.getString(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
                         )
-
-                        mmr.setDataSource(path)
-                        val artBytes =  mmr.getEmbeddedPicture()
-                        var bm: Bitmap?  = null
-                        if (artBytes!=null) {
-                            bm = BitmapFactory.decodeByteArray(artBytes, 0, artBytes.size)
-                        }
-
                         val album_id: Long = cursor.getLong(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
                         )
-
                         val sArtworkUri = Uri.parse("content://media/external/audio/albumart")
                         val imageUri = Uri.withAppendedPath(sArtworkUri, album_id.toString())
 
+                        mmr.setDataSource(path)
+                        val artBytes = mmr.embeddedPicture
+                        var bm: Bitmap? = null
+                        if (artBytes != null) {
+                            bm = BitmapFactory.decodeByteArray(artBytes, 0, artBytes.size)
+                        }
+
                         val audioContent = ItemAudio(
                             name,
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(
-                                    MediaStore.Audio.Media.TITLE
-                                )
-                            ),
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)),
                             id,
                             contentUri,
                             path,
-
-                            cursor.getLong(
-                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
-                            ),
-
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(
-                                    MediaStore.Audio.Media.ALBUM
-                                )
-                            ),
-                            cursor.getLong(
-                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
-                            ),
-
+                            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)),
+                            cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)),
                             imageUri,
-
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
-                            ),
-
-                            cursor.getString(
-                                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER)
-                            ),
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER)),
                             bm
                         )
                         audioList.add(audioContent)

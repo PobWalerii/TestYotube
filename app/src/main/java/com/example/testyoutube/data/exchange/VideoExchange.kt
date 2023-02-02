@@ -12,7 +12,6 @@ class VideoExchange {
     fun setCurrentVideo(item: ItemVideo) {
         currentItem = item
     }
-
     fun setCurrentList(list: List<ItemVideo>) {
         listVideo = list
     }

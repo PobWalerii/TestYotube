@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
@@ -34,18 +35,17 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("imageMini","imageAudio")
     fun ImageView.loadImageMini(imageMini: Any?, imageAudio: Boolean) {
-        if(imageMini!=null) {
-            Glide.with(this.context).load(imageMini)
-                .placeholder(if(imageAudio) R.drawable.audio else R.drawable.square)
-                .centerCrop()
-                .into(this)
-        }
+        Glide.with(this.context).load(imageMini)
+            .placeholder(if (imageAudio) R.drawable.audio else R.drawable.square)
+            .centerCrop()
+            .into(this)
     }
 
     @JvmStatic
     @BindingAdapter("loadImageAudio")
     fun loadImageAudio(imageView: ImageView, image: Any?) {
         Glide.with(imageView.context).load(image)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .placeholder(R.drawable.audio)
             .into(imageView)
     }

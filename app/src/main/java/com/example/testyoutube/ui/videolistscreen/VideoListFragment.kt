@@ -72,31 +72,39 @@ class VideoListFragment : Fragment() {
         }
     }
 
-    private fun refreshRecyclers(current: ItemVideo) {
-        var position = verticalAdapter.getItemPosition(current)
-        verticalRecyclerView.layoutManager?.scrollToPosition(position)
-        position = horisontalAdapter.getItemPosition(current)
-        if(position != -1) {
-            horisontalRecyclerView.layoutManager?.scrollToPosition(position)
-        }
-    }
+
 
     private fun setupItemClickListener() {
         horisontalAdapter.setOnItemClickListener(object : HorisontalListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemVideo) {
                 exchangeCurrentItem(current)
+                //viewModel.setCurrentVideo(current)
+                //miniPlayerSetItem(current)
+                //refreshRecyclers(current,1)
             }
         })
         verticalAdapter.setOnItemClickListener(object : VerticalListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemVideo) {
                 exchangeCurrentItem(current)
+                //viewModel.setCurrentVideo(current)
+                //miniPlayerSetItem(current)
+                //refreshRecyclers(current,2)
             }
         })
     }
 
-    private fun exchangeCurrentItem(current: ItemVideo) {
-        viewModel.setCurrentVideo(current)
-        playViewModel.navigationVideo(0)
+    private fun refreshRecyclers(current: ItemVideo, type: Int = 0) {
+        var position = 0
+        if( type != 2 ) {
+            position = verticalAdapter.getItemPosition(current)
+            verticalRecyclerView.layoutManager?.scrollToPosition(position)
+        }
+        if( type !=1 ) {
+            position = horisontalAdapter.getItemPosition(current)
+            if (position != -1) {
+                horisontalRecyclerView.layoutManager?.scrollToPosition(position)
+            }
+        }
     }
 
     private fun miniPlayerSetItem(current: ItemVideo) {
@@ -133,7 +141,8 @@ class VideoListFragment : Fragment() {
             getVideoFromDatabase()
             getVideoList(keyWord)
             viewModel.isStarted = true
-        } else {
+        }
+        else {
             playViewModel.navigationVideo(0)
             binding.responseSize = viewModel.getSizeVideoList()
             binding.searchText = viewModel.keyWord
@@ -149,9 +158,15 @@ class VideoListFragment : Fragment() {
         binding.searchText = keyWord
         saveSearhText(keyWord)
         if(list.isNotEmpty()) {
-            viewModel.setCurrentVideo(list[0])
-            playViewModel.navigationVideo(0)
+            exchangeCurrentItem(list[0])
+            //viewModel.setCurrentVideo(list[0])
+            //playViewModel.navigationVideo(0)
         }
+    }
+
+    private fun exchangeCurrentItem(current: ItemVideo) {
+        viewModel.setCurrentVideo(current)
+        playViewModel.navigationVideo(0)
     }
 
     private fun getVideoList(keyWord: String) {
