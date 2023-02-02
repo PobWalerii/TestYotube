@@ -1,5 +1,6 @@
 package com.example.testyoutube.ui.videolistscreen
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
@@ -48,90 +50,27 @@ class VideoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclers()
+
         observeUiState()
-        observeListState()
-        setOnMenuClickListener()
-        setOnSearchClickListener()
         setupItemClickListener()
-        setItemNavigationListener()
-        startVideoListener()
+        setOnBottomMenuClickListener()
         startUI()
+
+    //observeListState()
+
+        //setOnSearchClickListener()
+
+        //setItemNavigationListener()
+        //startVideoListener()
+
     }
 
-    private fun observeListState() {
-        playViewModel.state.observe(viewLifecycleOwner, ::handleItemUiState)
-    }
-    private fun handleItemUiState(state: ItemUiState) {
-        when (state) {
-            is ExchangeItem -> {
-                state.data.apply {
-                    miniPlayerSetItem(this)
-                    refreshRecyclers(this)
-                }
-            }
-        }
-    }
-
-
-
-    private fun setupItemClickListener() {
-        horisontalAdapter.setOnItemClickListener(object : HorisontalListAdapter.OnItemClickListener {
-            override fun onItemClick(current: ItemVideo) {
-                exchangeCurrentItem(current)
-                //viewModel.setCurrentVideo(current)
-                //miniPlayerSetItem(current)
-                //refreshRecyclers(current,1)
-            }
-        })
-        verticalAdapter.setOnItemClickListener(object : VerticalListAdapter.OnItemClickListener {
-            override fun onItemClick(current: ItemVideo) {
-                exchangeCurrentItem(current)
-                //viewModel.setCurrentVideo(current)
-                //miniPlayerSetItem(current)
-                //refreshRecyclers(current,2)
-            }
-        })
-    }
-
-    private fun refreshRecyclers(current: ItemVideo, type: Int = 0) {
-        var position = 0
-        if( type != 2 ) {
-            position = verticalAdapter.getItemPosition(current)
-            verticalRecyclerView.layoutManager?.scrollToPosition(position)
-        }
-        if( type !=1 ) {
-            position = horisontalAdapter.getItemPosition(current)
-            if (position != -1) {
-                horisontalRecyclerView.layoutManager?.scrollToPosition(position)
-            }
-        }
-    }
-
-    private fun miniPlayerSetItem(current: ItemVideo) {
-        with (binding.miniPlayer) {
-            image = current.imageUrl
-            channel = current.channelTitle
-            title = current.title
-        }
-    }
-
-    private fun setupAdapters() {
-        horisontalAdapter = HorisontalListAdapter()
-        horisontalAdapter.setHasStableIds(true)
-        verticalAdapter = VerticalListAdapter()
-        verticalAdapter.setHasStableIds(true)
-    }
-
-    private fun setupRecyclers() {
-        horisontalRecyclerView = binding.recyclerChannels
-        horisontalRecyclerView.adapter = horisontalAdapter
-        verticalRecyclerView = binding.recyclerContent
-        verticalRecyclerView.adapter = verticalAdapter
-        verticalRecyclerView.layoutManager = GridLayoutManager(requireContext(),3)
-    }
+    @SuppressLint("NotifyDataSetChanged")
     private fun startUI() {
+        horisontalRecyclerView.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.bottomBar.active = 1
         if ( !viewModel.isStarted ) {
+            Toast.makeText(context,"1",Toast.LENGTH_SHORT).show()
             val sPref =
                 requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
             val default = getString(R.string.start_response)
@@ -143,9 +82,20 @@ class VideoListFragment : Fragment() {
             viewModel.isStarted = true
         }
         else {
-            playViewModel.navigationVideo(0)
-            binding.responseSize = viewModel.getSizeVideoList()
-            binding.searchText = viewModel.keyWord
+            Toast.makeText(context,"2",Toast.LENGTH_SHORT).show()
+            viewModel.getCurrentVideo().apply {
+                if(this!=null) {
+                    //miniPlayerSetItem(this)
+                    //horisontalAdapter.notifyDataSetChanged()
+                    //refreshRecyclers(this,2)
+                    exchangeCurrentItem(this)
+                    refreshRecyclers(this,2)
+
+                }
+            }
+        //    playViewModel.navigationVideo(0)
+        //    binding.responseSize = viewModel.getSizeVideoList()
+        //    binding.searchText = viewModel.keyWord
         }
     }
 
@@ -166,15 +116,90 @@ class VideoListFragment : Fragment() {
 
     private fun exchangeCurrentItem(current: ItemVideo) {
         viewModel.setCurrentVideo(current)
-        playViewModel.navigationVideo(0)
+        //playViewModel.navigationVideo(0)
+        miniPlayerSetItem(current)
     }
 
-    private fun getVideoList(keyWord: String) {
-        viewModel.getVideoList(keyWord)
+    private fun setupItemClickListener() {
+        horisontalAdapter.setOnItemClickListener(object : HorisontalListAdapter.OnItemClickListener {
+            override fun onItemClick(current: ItemVideo) {
+                exchangeCurrentItem(current)
+                refreshRecyclers(current,1)
+                //viewModel.setCurrentVideo(current)
+                //miniPlayerSetItem(current)
+
+            }
+        })
+        verticalAdapter.setOnItemClickListener(object : VerticalListAdapter.OnItemClickListener {
+            override fun onItemClick(current: ItemVideo) {
+                exchangeCurrentItem(current)
+                refreshRecyclers(current,2)
+                //viewModel.setCurrentVideo(current)
+                //miniPlayerSetItem(current)
+
+            }
+        })
     }
-    private fun getVideoFromDatabase() {
-        viewModel.getVideoFromDatabase()
+
+    private fun refreshRecyclers(current: ItemVideo, type: Int = 0) {
+        var position = 0
+        if( type != 2 ) {
+            position = verticalAdapter.getItemPosition(current)
+            verticalAdapter.setCurrentIdFromPosition(position)
+            verticalRecyclerView.layoutManager?.scrollToPosition(position)
+        }
+        if( type !=1 ) {
+            position = horisontalAdapter.getItemPosition(current)
+            Toast.makeText(context,"position = $position",Toast.LENGTH_SHORT).show()
+            if (position != -1) {
+                horisontalAdapter.setCurrentIdFromPosition(position)
+                horisontalRecyclerView.layoutManager?.scrollToPosition(position)
+            }
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private fun observeListState() {
+        playViewModel.state.observe(viewLifecycleOwner, ::handleItemUiState)
+    }
+    private fun handleItemUiState(state: ItemUiState) {
+        when (state) {
+            is ExchangeItem -> {
+                state.data.apply {
+                    miniPlayerSetItem(this)
+                    refreshRecyclers(this)
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private fun setOnSearchClickListener() {
         binding.appBarLayout.search.setOnClickListener {
@@ -188,13 +213,9 @@ class VideoListFragment : Fragment() {
         }
     }
 
-    private fun setOnMenuClickListener() {
-        binding.bottomBar.files.setOnClickListener {
-            findNavController().navigate(
-                VideoListFragmentDirections.actionYoutubeScreenFragmentToPermissionsFragment()
-            )
-        }
-    }
+
+
+
     private fun startVideoListener() {
         binding.miniPlayer.miniPlayerContainer.setOnClickListener {
             startVideoFragment()
@@ -206,8 +227,40 @@ class VideoListFragment : Fragment() {
             VideoListFragmentDirections.actionYoutubeScreenFragmentToVideoPlayFragment())
     }
 
+
+
+    private fun setItemNavigationListener() {
+        binding.miniPlayer.imageNext.setOnClickListener {
+            playViewModel.navigationVideo(1)
+        }
+        binding.miniPlayer.imagePrev.setOnClickListener {
+            playViewModel.navigationVideo(-1)
+        }
+        binding.miniPlayer.imagePlay.setOnClickListener {
+            startVideoFragment()
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private fun setOnBottomMenuClickListener() {
+        binding.bottomBar.files.setOnClickListener {
+            findNavController().navigate(
+                VideoListFragmentDirections.actionYoutubeScreenFragmentToPermissionsFragment()
+            )
+        }
+    }
+
     private fun observeUiState() {
-        viewModel.state.observe(viewLifecycleOwner, ::handleUiState)
+        viewModel.stateList.observe(viewLifecycleOwner, ::handleUiState)
     }
 
     private fun handleUiState(state: ListUiState) {
@@ -230,21 +283,40 @@ class VideoListFragment : Fragment() {
                     if(this.isNotEmpty()) {
                         refreshUi(this)
                     }
-                    viewModel.isBaseLoaded = true
+                    //viewModel.isBaseLoaded = true
                 }
             }
         }
     }
 
-    private fun setItemNavigationListener() {
-        binding.miniPlayer.imageNext.setOnClickListener {
-            playViewModel.navigationVideo(1)
-        }
-        binding.miniPlayer.imagePrev.setOnClickListener {
-            playViewModel.navigationVideo(-1)
-        }
-        binding.miniPlayer.imagePlay.setOnClickListener {
-            startVideoFragment()
+    private fun setupAdapters() {
+        horisontalAdapter = HorisontalListAdapter()
+        horisontalAdapter.setHasStableIds(true)
+        verticalAdapter = VerticalListAdapter()
+        verticalAdapter.setHasStableIds(true)
+    }
+
+    private fun setupRecyclers() {
+        horisontalRecyclerView = binding.recyclerChannels
+        horisontalRecyclerView.adapter = horisontalAdapter
+        horisontalRecyclerView.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        verticalRecyclerView = binding.recyclerContent
+        verticalRecyclerView.adapter = verticalAdapter
+        verticalRecyclerView.layoutManager = GridLayoutManager(requireContext(),3)
+    }
+
+    private fun getVideoList(keyWord: String) {
+        viewModel.getVideoList(keyWord)
+    }
+    private fun getVideoFromDatabase() {
+        viewModel.getVideoFromDatabase()
+    }
+
+    private fun miniPlayerSetItem(current: ItemVideo) {
+        with (binding.miniPlayer) {
+            image = current.imageUrl
+            channel = current.channelTitle
+            title = current.title
         }
     }
 

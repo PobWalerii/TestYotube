@@ -60,6 +60,10 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     override fun getItemId(position: Int): Long = listVideo[position].id
     fun getItemPosition(item: ItemVideo): Int = listVideo.indexOf(item)
 
+    fun setCurrentIdFromPosition(position: Int) {
+        currentId = listVideo[position].id
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<ItemVideo>) {
         listVideo = list

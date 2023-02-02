@@ -77,10 +77,12 @@ class FilesScreenFragment : Fragment() {
     }
 
     private fun miniPlayerSetItem(current: ItemAudio) {
-            binding.miniPlayer.image = current.art_uri.toString()
-            binding.miniPlayer.imageBitmap = current.image
-            binding.miniPlayer.channel = current.artist
-            binding.miniPlayer.title = current.title
+        with(binding.miniPlayer) {
+            image = current.art_uri.toString()
+            imageBitmap = current.image
+            channel = current.artist
+            title = current.title
+        }
     }
 
     private fun setupAdapter() {
