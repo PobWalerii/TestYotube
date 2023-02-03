@@ -36,6 +36,7 @@ object BindingAdapter {
     @BindingAdapter("imageMini","imageAudio")
     fun ImageView.loadImageMini(imageMini: Any?, imageAudio: Boolean) {
         Glide.with(this.context).load(imageMini)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .placeholder(if (imageAudio) R.drawable.audio else R.drawable.square)
             .centerCrop()
             .into(this)

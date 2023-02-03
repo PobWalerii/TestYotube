@@ -16,6 +16,7 @@ class VideoExchange {
     fun setCurrentList(list: List<ItemVideo>) {
         listVideo = list
     }
+    fun getFirstFromCurrentList(): ItemVideo =listVideo[0]
     fun getSizeList() = listVideo.size
 
     fun navigationVideo(bias: Int): Flow<ItemState<ItemVideo>> {

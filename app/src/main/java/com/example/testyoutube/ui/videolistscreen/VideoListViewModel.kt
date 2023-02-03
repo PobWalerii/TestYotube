@@ -36,6 +36,10 @@ class VideoListViewModel @Inject constructor(
         exchange.setCurrentList(list)
     }
 
+    fun getFirstFromCurrentList(): ItemVideo {
+        return exchange.getFirstFromCurrentList()
+    }
+
     fun getVideoList(keyWord: String) {
         viewModelScope.launch {
             repository

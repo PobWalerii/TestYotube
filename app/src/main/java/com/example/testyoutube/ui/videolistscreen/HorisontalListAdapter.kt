@@ -15,19 +15,21 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     private var listVideo: List<ItemVideo> = emptyList()
     private var currentId: Long = 0
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val binding = VideoTopListItemBinding.bind(itemView)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = VideoTopListItemBinding.bind(view)
 
         fun bind(item: ItemVideo, currentId: Long) {
             binding.item = item
             binding.current = currentId
         }
+
         fun getBinding(): VideoTopListItemBinding = binding
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.video_top_list_item,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.video_top_list_item, parent, false)
         val holder = ViewHolder(view)
         val binding = holder.getBinding()
         binding.container.setOnClickListener {
@@ -48,6 +50,7 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
+
     interface OnItemClickListener {
         fun onItemClick(current: ItemVideo)
     }
@@ -57,6 +60,7 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     }
 
     override fun getItemCount(): Int = listVideo.size
+
     override fun getItemId(position: Int): Long = listVideo[position].id
     fun getItemPosition(item: ItemVideo): Int = listVideo.indexOf(item)
 

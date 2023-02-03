@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="visibleProgress"
             type="Boolean" />
@@ -34,7 +33,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/title_margin_start"
+            android:layout_marginEnd="@dimen/title_margin_start"
             android:layout_marginTop="@dimen/title_margin_top"
+            android:singleLine="true"
             android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_title_size"
@@ -45,23 +46,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
+<ScrollView
+    android:id="@+id/recyclercontainer"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_recyclerChannels"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/titleForChannels">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerChannels"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/height_recyclerChannels"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleForChannels" />
+            android:orientation="horizontal" />
+</ScrollView>
+
+
 
         <ProgressBar
             style="?android:attr/progressBarStyle"
             android:layout_width="@dimen/progress_size"
             android:layout_height="@dimen/progress_size"
-            app:layout_constraintBottom_toBottomOf="@+id/recyclerChannels"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclercontainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/recyclerChannels"
+            app:layout_constraintTop_toTopOf="@+id/recyclercontainer"
             app:setVisible="@{visibleProgress}" />
 
         <TextView
@@ -70,12 +80,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/title_margin_start"
             android:layout_marginTop="@dimen/title_margin_top"
+            android:layout_marginEnd="@dimen/title_margin_top"
+            android:singleLine="true"
             android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_title_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerChannels"
+            app:layout_constraintTop_toBottomOf="@+id/recyclercontainer"
             app:secondLoad="@{visibleProgress}"
             app:secondSize="@{responseSize}"
             app:secondText="@{searchText}" />

@@ -53,6 +53,9 @@ dependencies {
     //fragments
     implementation "androidx.fragment:fragment-ktx:1.5.5"
 
+    //recyclerview
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+
     //Hilt
     implementation 'com.google.dagger:hilt-android:2.44'
     kapt 'com.google.dagger:hilt-android-compiler:2.44'

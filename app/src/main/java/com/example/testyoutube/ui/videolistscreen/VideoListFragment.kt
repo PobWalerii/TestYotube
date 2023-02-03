@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
@@ -49,12 +50,13 @@ class VideoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclers()
 
+        setupRecyclers()
+        startUI()
         observeUiState()
         setupItemClickListener()
         setOnBottomMenuClickListener()
-        startUI()
+
 
     //observeListState()
 
@@ -67,10 +69,8 @@ class VideoListFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun startUI() {
-        horisontalRecyclerView.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.bottomBar.active = 1
         if ( !viewModel.isStarted ) {
-            Toast.makeText(context,"1",Toast.LENGTH_SHORT).show()
             val sPref =
                 requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
             val default = getString(R.string.start_response)
@@ -78,18 +78,20 @@ class VideoListFragment : Fragment() {
             val keyWord = startResponse ?: default
             viewModel.keyWord = keyWord
             getVideoFromDatabase()
-            getVideoList(keyWord)
-            viewModel.isStarted = true
+            //getVideoList(keyWord)
+            //viewModel.isStarted = true
         }
         else {
-            Toast.makeText(context,"2",Toast.LENGTH_SHORT).show()
             viewModel.getCurrentVideo().apply {
                 if(this!=null) {
-                    //miniPlayerSetItem(this)
+                    miniPlayerSetItem(this)
                     //horisontalAdapter.notifyDataSetChanged()
                     //refreshRecyclers(this,2)
-                    exchangeCurrentItem(this)
-                    refreshRecyclers(this,2)
+
+                    //exchangeCurrentItem(this)
+
+                    //refreshRecyclers(viewModel.getFirstFromCurrentList(),2)
+                    //refreshRecyclers(this,2)
 
                 }
             }
@@ -101,18 +103,32 @@ class VideoListFragment : Fragment() {
 
     private fun refreshUi(list: List<ItemVideo>) {
         viewModel.setCurrentList(list)
-        horisontalAdapter.setList(list.take(COUNT_HORIZONTAL_ITEMS))
-        verticalAdapter.setList(list)
+        //val listHorisontal = list.subList(0,COUNT_HORIZONTAL_ITEMS)
+        //if(!viewModel.isStarted) {
+            horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
+            verticalAdapter.setList(list)
+        //}
+
         val keyWord = viewModel.keyWord
         binding.responseSize = list.size
         binding.searchText = keyWord
         saveSearhText(keyWord)
-        if(list.isNotEmpty()) {
+        if(!viewModel.isStarted) {       //list.isNotEmpty() &&
             exchangeCurrentItem(list[0])
+            viewModel.isStarted = true
             //viewModel.setCurrentVideo(list[0])
             //playViewModel.navigationVideo(0)
+        } else {
+            val current = viewModel.getCurrentVideo()
+            if( current != null ) {
+                Toast.makeText(context,"${current.title}",Toast.LENGTH_SHORT).show()
+                exchangeCurrentItem(current)
+
+                refreshRecyclers(current,2)
+            }
         }
     }
+
 
     private fun exchangeCurrentItem(current: ItemVideo) {
         viewModel.setCurrentVideo(current)
@@ -142,18 +158,17 @@ class VideoListFragment : Fragment() {
     }
 
     private fun refreshRecyclers(current: ItemVideo, type: Int = 0) {
-        var position = 0
+        //var position = 0
         if( type != 2 ) {
-            position = verticalAdapter.getItemPosition(current)
-            verticalAdapter.setCurrentIdFromPosition(position)
-            verticalRecyclerView.layoutManager?.scrollToPosition(position)
+            val position1 = verticalAdapter.getItemPosition(current)
+            verticalAdapter.setCurrentIdFromPosition(position1)
+            verticalRecyclerView.layoutManager?.scrollToPosition(position1)
         }
         if( type !=1 ) {
-            position = horisontalAdapter.getItemPosition(current)
-            Toast.makeText(context,"position = $position",Toast.LENGTH_SHORT).show()
-            if (position != -1) {
-                horisontalAdapter.setCurrentIdFromPosition(position)
-                horisontalRecyclerView.layoutManager?.scrollToPosition(position)
+            val position2 = horisontalAdapter.getItemPosition(current)
+            if (position2 != -1) {
+                horisontalAdapter.setCurrentIdFromPosition(position2)
+                horisontalRecyclerView.layoutManager?.scrollToPosition(position2)
             }
         }
     }
@@ -280,9 +295,9 @@ class VideoListFragment : Fragment() {
             }
             is ListFromBase -> {
                 state.data.apply {
-                    if(this.isNotEmpty()) {
+                    //if(this.isNotEmpty()) {
                         refreshUi(this)
-                    }
+                    //}
                     //viewModel.isBaseLoaded = true
                 }
             }
@@ -297,12 +312,13 @@ class VideoListFragment : Fragment() {
     }
 
     private fun setupRecyclers() {
-        horisontalRecyclerView = binding.recyclerChannels
-        horisontalRecyclerView.adapter = horisontalAdapter
-        horisontalRecyclerView.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         verticalRecyclerView = binding.recyclerContent
         verticalRecyclerView.adapter = verticalAdapter
-        verticalRecyclerView.layoutManager = GridLayoutManager(requireContext(),3)
+        verticalRecyclerView.layoutManager = GridLayoutManager(context,3)
+        horisontalRecyclerView = binding.recyclerChannels
+        horisontalRecyclerView.adapter = horisontalAdapter
+        horisontalRecyclerView.layoutManager = null
+        horisontalRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
     }
 
     private fun getVideoList(keyWord: String) {
