@@ -82,9 +82,11 @@ class VideoListFragment : Fragment() {
             //viewModel.isStarted = true
         }
         else {
-            viewModel.getCurrentVideo().apply {
-                if(this!=null) {
-                    miniPlayerSetItem(this)
+            //viewModel.getCurrentVideo().apply {
+              //  if(this!=null) {
+                    //miniPlayerSetItem(this)
+
+
                     //horisontalAdapter.notifyDataSetChanged()
                     //refreshRecyclers(this,2)
 
@@ -93,8 +95,8 @@ class VideoListFragment : Fragment() {
                     //refreshRecyclers(viewModel.getFirstFromCurrentList(),2)
                     //refreshRecyclers(this,2)
 
-                }
-            }
+                //}
+            //}
         //    playViewModel.navigationVideo(0)
         //    binding.responseSize = viewModel.getSizeVideoList()
         //    binding.searchText = viewModel.keyWord
@@ -103,17 +105,15 @@ class VideoListFragment : Fragment() {
 
     private fun refreshUi(list: List<ItemVideo>) {
         viewModel.setCurrentList(list)
-        //val listHorisontal = list.subList(0,COUNT_HORIZONTAL_ITEMS)
-        //if(!viewModel.isStarted) {
-            horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
-            verticalAdapter.setList(list)
-        //}
+        horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
+        verticalAdapter.setList(list)
 
         val keyWord = viewModel.keyWord
         binding.responseSize = list.size
         binding.searchText = keyWord
         saveSearhText(keyWord)
-        if(!viewModel.isStarted) {       //list.isNotEmpty() &&
+
+        if(!viewModel.isStarted) {
             exchangeCurrentItem(list[0])
             viewModel.isStarted = true
             //viewModel.setCurrentVideo(list[0])
@@ -121,10 +121,10 @@ class VideoListFragment : Fragment() {
         } else {
             val current = viewModel.getCurrentVideo()
             if( current != null ) {
-                Toast.makeText(context,"${current.title}",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"${current.title}",Toast.LENGTH_SHORT).show()
                 exchangeCurrentItem(current)
 
-                refreshRecyclers(current,2)
+                //refreshRecyclers(current,2)
             }
         }
     }
@@ -158,7 +158,6 @@ class VideoListFragment : Fragment() {
     }
 
     private fun refreshRecyclers(current: ItemVideo, type: Int = 0) {
-        //var position = 0
         if( type != 2 ) {
             val position1 = verticalAdapter.getItemPosition(current)
             verticalAdapter.setCurrentIdFromPosition(position1)
@@ -312,13 +311,12 @@ class VideoListFragment : Fragment() {
     }
 
     private fun setupRecyclers() {
+        horisontalRecyclerView = binding.recyclerChannels
+        horisontalRecyclerView.adapter = horisontalAdapter
+        horisontalRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
         verticalRecyclerView = binding.recyclerContent
         verticalRecyclerView.adapter = verticalAdapter
         verticalRecyclerView.layoutManager = GridLayoutManager(context,3)
-        horisontalRecyclerView = binding.recyclerChannels
-        horisontalRecyclerView.adapter = horisontalAdapter
-        horisontalRecyclerView.layoutManager = null
-        horisontalRecyclerView.layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
     }
 
     private fun getVideoList(keyWord: String) {
