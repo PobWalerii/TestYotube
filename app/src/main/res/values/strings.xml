@@ -9,6 +9,7 @@
     <string name="playing">Playing Now</string>
     <string name="text_explanation_permission">Без відповідного дозволу програма не зможе виконувати передбачені нею функції.</string>
     <string name="request_is_empty">По запиту нічого не знайдено</string>
+    <string name="empty_list">empty list</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -58,6 +58,15 @@
             app:layout_constraintTop_toBottomOf="@+id/titleForChannels"
             tools:ignore="RtlSymmetry" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_recyclerChannels"
+            android:src="@drawable/image_music"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerChannels"
+            app:layout_constraintTop_toTopOf="@+id/recyclerChannels"
+            app:setVisible="@{responseSize==0}"
+            tools:ignore="ContentDescription" />
+
         <ProgressBar
             style="?android:attr/progressBarStyle"
             android:layout_width="@dimen/progress_size"
@@ -99,6 +108,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/titleForContent" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_recyclerChannels"
+            android:src="@drawable/image_music"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerContent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerContent"
+            app:setVisible="@{responseSize==0}"
+            tools:ignore="ContentDescription" />
 
         <ProgressBar
             style="?android:attr/progressBarStyle"

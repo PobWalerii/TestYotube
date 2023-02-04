@@ -17,6 +17,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.testyoutube.R
+import com.example.testyoutube.bindingadapter.BindingAdapter.setFirstTitle
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 
@@ -79,6 +80,8 @@ object BindingAdapter {
         this.text =
             if (firstLoad) {
                 this.context.getString(R.string.loading)
+            } else if(firstSize==0) {
+                "${this.context.getString(R.string.full_result)}${firstText ?: ""} ${this.context.getString(R.string.empty_list)}"
             } else {
                 if (firstSize < COUNT_HORIZONTAL_ITEMS) {
                     "${this.context.getString(R.string.search_result)} ($firstSize) $firstText"
@@ -94,6 +97,8 @@ object BindingAdapter {
         this.text =
             if(secondLoad) {
                 this.context.getString(R.string.loading)
+            } else if(secondSize==0) {
+                "${this.context.getString(R.string.full_result)}${secondText ?: ""} ${this.context.getString(R.string.empty_list)}"
             } else {
                 if (secondSize < COUNT_HORIZONTAL_ITEMS) {
                     "${this.context.getString(R.string.search_result)} ($secondSize) $secondText"

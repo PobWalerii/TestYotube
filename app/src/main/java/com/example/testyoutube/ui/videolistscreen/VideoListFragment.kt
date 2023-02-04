@@ -281,6 +281,8 @@ class VideoListFragment : Fragment() {
                 Toast.makeText(
                     requireContext(), state.message, Toast.LENGTH_SHORT
                 ).show()
+                viewModel.isStarted = false
+                viewModel.getVideoFromDatabase()
             }
             is ListLoaded -> {
                 state.data.apply {
@@ -289,6 +291,7 @@ class VideoListFragment : Fragment() {
                         refreshUi(this)
                     } else {
                         Toast.makeText(context, R.string.request_is_empty,Toast.LENGTH_LONG).show()
+                        viewModel.isStarted = false
                         viewModel.getVideoFromDatabase()
                     }
                 }
