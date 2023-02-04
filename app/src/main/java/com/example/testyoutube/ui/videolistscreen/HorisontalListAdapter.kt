@@ -69,8 +69,11 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: List<ItemVideo>) {
+    fun setList(list: List<ItemVideo>, nullId: Boolean = false) {
         listVideo = list
+        if(nullId) {
+            currentId = 0
+        }
         notifyDataSetChanged()
     }
 

@@ -21,6 +21,8 @@ class VideoListViewModel @Inject constructor(
     private var _stateList: MutableLiveData<ListUiState> = MutableLiveData()
     val stateList: LiveData<ListUiState> = _stateList
 
+
+
     var keyWord = ""
     var isStarted = false
     //var isBaseLoaded = false

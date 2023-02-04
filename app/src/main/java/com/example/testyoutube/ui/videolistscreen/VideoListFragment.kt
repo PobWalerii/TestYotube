@@ -56,15 +56,10 @@ class VideoListFragment : Fragment() {
         observeUiState()
         setupItemClickListener()
         setOnBottomMenuClickListener()
-
-
-    //observeListState()
-
-        //setOnSearchClickListener()
-
-        //setItemNavigationListener()
-        //startVideoListener()
-
+        startVideoFragmentListener()
+        observeListState()
+        setPlayerNavigationListener()
+        setOnSearchClickListener()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -78,10 +73,10 @@ class VideoListFragment : Fragment() {
             val keyWord = startResponse ?: default
             viewModel.keyWord = keyWord
             getVideoFromDatabase()
-            //getVideoList(keyWord)
-            //viewModel.isStarted = true
+            getVideoList(keyWord)
         }
         else {
+            getVideoFromDatabase()
             //viewModel.getCurrentVideo().apply {
               //  if(this!=null) {
                     //miniPlayerSetItem(this)
@@ -104,27 +99,20 @@ class VideoListFragment : Fragment() {
     }
 
     private fun refreshUi(list: List<ItemVideo>) {
-        viewModel.setCurrentList(list)
-        horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
-        verticalAdapter.setList(list)
-
-        val keyWord = viewModel.keyWord
         binding.responseSize = list.size
-        binding.searchText = keyWord
-        saveSearhText(keyWord)
-
+        binding.searchText = viewModel.keyWord
         if(!viewModel.isStarted) {
-            exchangeCurrentItem(list[0])
+            viewModel.setCurrentList(list)
             viewModel.isStarted = true
-            //viewModel.setCurrentVideo(list[0])
-            //playViewModel.navigationVideo(0)
+            horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
+            verticalAdapter.setList(list)
+            saveSearhText(viewModel.keyWord)
+            exchangeCurrentItem(list[0])
         } else {
             val current = viewModel.getCurrentVideo()
             if( current != null ) {
-                //Toast.makeText(context,"${current.title}",Toast.LENGTH_SHORT).show()
-                exchangeCurrentItem(current)
-
-                //refreshRecyclers(current,2)
+                miniPlayerSetItem(current)
+                refreshRecyclers(current)
             }
         }
     }
@@ -141,18 +129,12 @@ class VideoListFragment : Fragment() {
             override fun onItemClick(current: ItemVideo) {
                 exchangeCurrentItem(current)
                 refreshRecyclers(current,1)
-                //viewModel.setCurrentVideo(current)
-                //miniPlayerSetItem(current)
-
             }
         })
         verticalAdapter.setOnItemClickListener(object : VerticalListAdapter.OnItemClickListener {
             override fun onItemClick(current: ItemVideo) {
                 exchangeCurrentItem(current)
                 refreshRecyclers(current,2)
-                //viewModel.setCurrentVideo(current)
-                //miniPlayerSetItem(current)
-
             }
         })
     }
@@ -191,9 +173,12 @@ class VideoListFragment : Fragment() {
     private fun handleItemUiState(state: ItemUiState) {
         when (state) {
             is ExchangeItem -> {
-                state.data.apply {
-                    miniPlayerSetItem(this)
-                    refreshRecyclers(this)
+                state.data.let {
+                    val current = viewModel.getCurrentVideo()
+                    if(current!=null) {
+                        miniPlayerSetItem(current)
+                        refreshRecyclers(current)
+                    }
                 }
             }
         }
@@ -222,7 +207,10 @@ class VideoListFragment : Fragment() {
             if (keyWord.isNotEmpty()) {
                 hideKeyboardFromView(textView.context, textView)
                 viewModel.keyWord = keyWord
+                viewModel.isStarted = false
                 getVideoList(keyWord)
+                verticalAdapter.setList(emptyList())
+                horisontalAdapter.setList(emptyList())
             }
         }
     }
@@ -230,7 +218,7 @@ class VideoListFragment : Fragment() {
 
 
 
-    private fun startVideoListener() {
+    private fun startVideoFragmentListener() {
         binding.miniPlayer.miniPlayerContainer.setOnClickListener {
             startVideoFragment()
         }
@@ -243,7 +231,17 @@ class VideoListFragment : Fragment() {
 
 
 
-    private fun setItemNavigationListener() {
+
+
+
+
+
+
+
+
+
+
+    private fun setPlayerNavigationListener() {
         binding.miniPlayer.imageNext.setOnClickListener {
             playViewModel.navigationVideo(1)
         }
@@ -286,7 +284,13 @@ class VideoListFragment : Fragment() {
             }
             is ListLoaded -> {
                 state.data.apply {
-                    refreshUi(this)
+                    if(this.isNotEmpty()) {
+                        binding.appBarLayout.textSearch.text.clear()
+                        refreshUi(this)
+                    } else {
+                        Toast.makeText(context, R.string.request_is_empty,Toast.LENGTH_LONG).show()
+                        viewModel.getVideoFromDatabase()
+                    }
                 }
             }
             is ListLoading -> {
@@ -294,9 +298,9 @@ class VideoListFragment : Fragment() {
             }
             is ListFromBase -> {
                 state.data.apply {
-                    //if(this.isNotEmpty()) {
+                    if(this.isNotEmpty()) {
                         refreshUi(this)
-                    //}
+                    }
                     //viewModel.isBaseLoaded = true
                 }
             }
@@ -327,11 +331,9 @@ class VideoListFragment : Fragment() {
     }
 
     private fun miniPlayerSetItem(current: ItemVideo) {
-        with (binding.miniPlayer) {
-            image = current.imageUrl
-            channel = current.channelTitle
-            title = current.title
-        }
+        binding.miniPlayer.image = current.imageUrl
+        binding.miniPlayer.channel = current.channelTitle
+        binding.miniPlayer.title = current.title
     }
 
     private fun saveSearhText(keyWord: String) {

@@ -64,9 +64,11 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: List<ItemVideo>) {
+    fun setList(list: List<ItemVideo>, nullId: Boolean = false) {
         listVideo = list
+        if(nullId) {
+            currentId = 0
+        }
         notifyDataSetChanged()
     }
-
 }
