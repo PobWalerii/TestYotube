@@ -2,14 +2,15 @@
     <string name="app_name">TestYoutube</string>
     <string name="music">Музика</string>
     <string name="files">Файли</string>
-    <string name="start_response">Українські пісні</string>
+    <string name="start_response">Наїмся чорвячків</string>
     <string name="full_result">Toп-</string>
     <string name="search_result">Результат пошуку</string>
     <string name="loading">Завантаження…</string>
     <string name="playing">Playing Now</string>
     <string name="text_explanation_permission">Без відповідного дозволу програма не зможе виконувати передбачені нею функції.</string>
     <string name="request_is_empty">По запиту нічого не знайдено</string>
-    <string name="empty_list">empty list</string>
-
+    <string name="empty_list"> - нічого не знайдено</string>
+    <string name="data_error">Помилка завантаження даних!</string>
+    <string name="internet_error">Перевірте підключення до Інтернету</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

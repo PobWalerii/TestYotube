@@ -18,8 +18,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideVideoRepository(apiService: ApiService, videoDao: VideoDao): VideoRepository {
-        return VideoRepository(apiService, videoDao)
+    fun provideVideoRepository(apiService: ApiService, videoDao: VideoDao, @ApplicationContext context: Context): VideoRepository {
+        return VideoRepository(apiService, videoDao, context)
     }
 
     @Singleton

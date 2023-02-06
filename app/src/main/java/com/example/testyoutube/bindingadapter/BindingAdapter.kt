@@ -81,7 +81,7 @@ object BindingAdapter {
             if (firstLoad) {
                 this.context.getString(R.string.loading)
             } else if(firstSize==0) {
-                "${this.context.getString(R.string.full_result)}${firstText ?: ""} ${this.context.getString(R.string.empty_list)}"
+                "${firstText ?: ""} ${this.context.getString(R.string.empty_list)}"
             } else {
                 if (firstSize < COUNT_HORIZONTAL_ITEMS) {
                     "${this.context.getString(R.string.search_result)} ($firstSize) $firstText"
@@ -98,7 +98,7 @@ object BindingAdapter {
             if(secondLoad) {
                 this.context.getString(R.string.loading)
             } else if(secondSize==0) {
-                "${this.context.getString(R.string.full_result)}${secondText ?: ""} ${this.context.getString(R.string.empty_list)}"
+                "${secondText ?: ""} ${this.context.getString(R.string.empty_list)}"
             } else {
                 if (secondSize < COUNT_HORIZONTAL_ITEMS) {
                     "${this.context.getString(R.string.search_result)} ($secondSize) $secondText"

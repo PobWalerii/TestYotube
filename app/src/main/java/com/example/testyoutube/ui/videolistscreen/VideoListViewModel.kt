@@ -21,11 +21,12 @@ class VideoListViewModel @Inject constructor(
     private var _stateList: MutableLiveData<ListUiState> = MutableLiveData()
     val stateList: LiveData<ListUiState> = _stateList
 
-
-
     var keyWord = ""
+    var keyWordForSearh =""
     var isStarted = false
-    //var isBaseLoaded = false
+    var isBaseLoaded = false
+    var isApiLoaded = false
+    var isSearhResponse = false
 
     fun setCurrentVideo(item: ItemVideo) {
         exchange.setCurrentVideo(item)

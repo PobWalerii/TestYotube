@@ -72,55 +72,82 @@ class VideoListFragment : Fragment() {
             val startResponse = sPref.getString("textSearch", default)
             val keyWord = startResponse ?: default
             viewModel.keyWord = keyWord
-            getVideoFromDatabase()
-            getVideoList(keyWord)
         }
-        else {
-            getVideoFromDatabase()
-            //viewModel.getCurrentVideo().apply {
-              //  if(this!=null) {
-                    //miniPlayerSetItem(this)
-
-
-                    //horisontalAdapter.notifyDataSetChanged()
-                    //refreshRecyclers(this,2)
-
-                    //exchangeCurrentItem(this)
-
-                    //refreshRecyclers(viewModel.getFirstFromCurrentList(),2)
-                    //refreshRecyclers(this,2)
-
-                //}
-            //}
-        //    playViewModel.navigationVideo(0)
-        //    binding.responseSize = viewModel.getSizeVideoList()
-        //    binding.searchText = viewModel.keyWord
-        }
+        getVideoFromDatabase()
     }
 
     private fun refreshUi(list: List<ItemVideo>) {
-        binding.responseSize = list.size
-        binding.searchText = viewModel.keyWord
-        if(!viewModel.isStarted) {
-            viewModel.setCurrentList(list)
-            viewModel.isStarted = true
-            horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
-            verticalAdapter.setList(list)
-            saveSearhText(viewModel.keyWord)
-            exchangeCurrentItem(list[0])
-        } else {
-            val current = viewModel.getCurrentVideo()
-            if( current != null ) {
-                miniPlayerSetItem(current)
-                refreshRecyclers(current)
-            }
-        }
-    }
+        if(!viewModel.isStarted) {  // start app
+            if(viewModel.isBaseLoaded) {
+                binding.searchText = viewModel.keyWord
+                binding.responseSize = list.size
+                horisontalAdapter.setList(
+                    if(list.size==0) {
+                        list
+                    } else {
+                        list.subList(0, COUNT_HORIZONTAL_ITEMS).toList()
+                    })
+                verticalAdapter.setList(list)
+                viewModel.setCurrentList(list)
+                if(list.isNotEmpty()) {
+                    exchangeCurrentItem(list[0])
+                }
 
+                viewModel.isBaseLoaded = false
+                getVideoList(viewModel.keyWord)
+            }
+            if(viewModel.isApiLoaded) {
+                if(list.isNotEmpty()) {
+
+                    binding.responseSize = list.size
+                    horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS).toList())
+                    verticalAdapter.setList(list)
+                    viewModel.setCurrentList(list)
+                    exchangeCurrentItem(list[0])
+
+                }
+                viewModel.isApiLoaded = false
+                viewModel.isStarted = true
+            }
+        } else if(viewModel.isBaseLoaded) { // return from fragments
+                binding.searchText = viewModel.keyWord
+                binding.responseSize = list.size
+                val current = viewModel.getCurrentVideo()
+                if (current != null) {
+                    miniPlayerSetItem(current)
+                    refreshRecyclers(current)
+                }
+                viewModel.isBaseLoaded = false
+        }
+
+            if(viewModel.isSearhResponse) {  // searchresponse
+
+                viewModel.isSearhResponse=false
+                viewModel.isApiLoaded=false
+
+                if(list.isNotEmpty()) {
+                    binding.appBarLayout.textSearch.text.clear()
+                    viewModel.keyWord = viewModel.keyWordForSearh
+                    saveSearhText(viewModel.keyWord)
+
+                    verticalAdapter.setList(emptyList())
+                    horisontalAdapter.setList(emptyList())
+
+                    binding.searchText = viewModel.keyWord
+                    binding.responseSize = list.size
+
+                    horisontalAdapter.setList(list.subList(0, COUNT_HORIZONTAL_ITEMS))
+                    verticalAdapter.setList(list)
+                    viewModel.setCurrentList(list)
+                    exchangeCurrentItem(list[0])
+                    refreshRecyclers(list[0])
+                }
+            }
+
+    }
 
     private fun exchangeCurrentItem(current: ItemVideo) {
         viewModel.setCurrentVideo(current)
-        //playViewModel.navigationVideo(0)
         miniPlayerSetItem(current)
     }
 
@@ -154,19 +181,6 @@ class VideoListFragment : Fragment() {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     private fun observeListState() {
         playViewModel.state.observe(viewLifecycleOwner, ::handleItemUiState)
     }
@@ -184,62 +198,27 @@ class VideoListFragment : Fragment() {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private fun setOnSearchClickListener() {
         binding.appBarLayout.search.setOnClickListener {
             val textView = binding.appBarLayout.textSearch
             val keyWord = textView.text.toString()
             if (keyWord.isNotEmpty()) {
+                viewModel.keyWordForSearh = keyWord
+                viewModel.isSearhResponse = true
                 hideKeyboardFromView(textView.context, textView)
-                viewModel.keyWord = keyWord
-                viewModel.isStarted = false
                 getVideoList(keyWord)
-                verticalAdapter.setList(emptyList())
-                horisontalAdapter.setList(emptyList())
             }
         }
     }
 
-
-
-
     private fun startVideoFragmentListener() {
         binding.miniPlayer.miniPlayerContainer.setOnClickListener {
-            startVideoFragment()
+            if(viewModel.getCurrentVideo()!=null) {
+                findNavController().navigate(
+                    VideoListFragmentDirections.actionYoutubeScreenFragmentToVideoPlayFragment())
+            }
         }
     }
-
-    private fun startVideoFragment() {
-        findNavController().navigate(
-            VideoListFragmentDirections.actionYoutubeScreenFragmentToVideoPlayFragment())
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 
     private fun setPlayerNavigationListener() {
         binding.miniPlayer.imageNext.setOnClickListener {
@@ -249,19 +228,9 @@ class VideoListFragment : Fragment() {
             playViewModel.navigationVideo(-1)
         }
         binding.miniPlayer.imagePlay.setOnClickListener {
-            startVideoFragment()
+
         }
     }
-
-
-
-
-
-
-
-
-
-
 
     private fun setOnBottomMenuClickListener() {
         binding.bottomBar.files.setOnClickListener {
@@ -281,30 +250,25 @@ class VideoListFragment : Fragment() {
                 Toast.makeText(
                     requireContext(), state.message, Toast.LENGTH_SHORT
                 ).show()
-                viewModel.isStarted = false
-                viewModel.getVideoFromDatabase()
+                viewModel.isApiLoaded = true
+                refreshUi(emptyList())
             }
             is ListLoaded -> {
+                viewModel.isApiLoaded = true
                 state.data.apply {
-                    if(this.isNotEmpty()) {
-                        binding.appBarLayout.textSearch.text.clear()
-                        refreshUi(this)
-                    } else {
+                    if(this.isEmpty()) {
                         Toast.makeText(context, R.string.request_is_empty,Toast.LENGTH_LONG).show()
-                        viewModel.isStarted = false
-                        viewModel.getVideoFromDatabase()
                     }
+                    refreshUi(this)
                 }
             }
             is ListLoading -> {
                 binding.visibleProgress = state.isLoading
             }
             is ListFromBase -> {
+                viewModel.isBaseLoaded = true
                 state.data.apply {
-                    if(this.isNotEmpty()) {
-                        refreshUi(this)
-                    }
-                    //viewModel.isBaseLoaded = true
+                    refreshUi(this)
                 }
             }
         }
