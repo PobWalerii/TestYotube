@@ -73,5 +73,7 @@ class FilesListViewModel @Inject constructor(
         exchange.setCurrentList(list)
     }
 
+    fun findItemForName(textSearch: String): ItemAudio? = exchange.findItemForName(textSearch)
+
 
 }

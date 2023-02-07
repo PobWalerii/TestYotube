@@ -272,8 +272,15 @@ class VideoListFragment : Fragment() {
     private fun handleUiState(state: ListUiState) {
         when (state) {
             is ListError -> {
+                val textError: String? = state.message
+                val stringError: String = context?.getString(R.string.data_error) +
+                        if(textError=="HTTP 400 " || textError=="HTTP 401 " || textError=="HTTP 403 " || textError=="HTTP 404 ") {
+                            " $textError"
+                        } else {
+                            " "+ context?.getString(R.string.internet_error)
+                        }
                 Toast.makeText(
-                    requireContext(), state.message, Toast.LENGTH_SHORT
+                    requireContext(), stringError, Toast.LENGTH_SHORT
                 ).show()
                 viewModel.isApiLoaded = true
                 refreshUi(emptyList())

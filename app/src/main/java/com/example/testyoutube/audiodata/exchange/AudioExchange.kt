@@ -32,4 +32,9 @@ class AudioExchange {
         }
     }
 
+    fun findItemForName(textSearch: String): ItemAudio? {
+        val item: ItemAudio? = listAudio.find { audio -> audio.name?.substring(0,textSearch.length)?.toUpperCase() == textSearch.toUpperCase() }
+        return item
+    }
+
 }

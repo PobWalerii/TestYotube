@@ -9,16 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.audiodata.entity.ItemAudio
-import com.example.testyoutube.audiodata.repository.AudioRepository
 import com.example.testyoutube.databinding.FragmentFilesScreenBinding
 import com.example.testyoutube.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FilesScreenFragment : Fragment() {
@@ -52,6 +51,7 @@ class FilesScreenFragment : Fragment() {
         setupItemClickListener()
         setItemNavigationListener()
         observeListState()
+        setListenersTextSearchChanged()
     }
 
     private fun observeListState() {
@@ -207,6 +207,19 @@ class FilesScreenFragment : Fragment() {
         }
     }
 
-
+    private fun setListenersTextSearchChanged() {
+        binding.appBarLayout.textSearch.addTextChangedListener {
+            definitionOfChange()
+        }
+    }
+    //https://www.geeksforgeeks.org/android-searchview-with-recyclerview-using-kotlin/
+    private fun definitionOfChange() {
+        val textSearch = binding.appBarLayout.textSearch.text.toString()
+        val item: ItemAudio? = viewModel.findItemForName(textSearch)
+        if( item!=null ) {
+            val position = adapter.getItemPosition(item)
+            recyclerView.layoutManager?.scrollToPosition(position)
+        }
+    }
 
 }

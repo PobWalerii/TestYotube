@@ -2,14 +2,11 @@ package com.example.testyoutube.audiodata.repository
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
-import android.widget.Toast
-import androidx.core.net.toUri
 import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.utils.AudioListState
 import dagger.hilt.android.qualifiers.ApplicationContext
