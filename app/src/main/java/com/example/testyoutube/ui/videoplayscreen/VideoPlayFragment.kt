@@ -23,7 +23,7 @@ class VideoPlayFragment : Fragment() {
     private var _binding: FragmentVideoPlayBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<VideoPlayViewModel>()
-    private lateinit var youTubePlayerView: YouTubePlayerView
+    var youTubePlayer: YouTubePlayer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,18 +37,17 @@ class VideoPlayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         startUi()
         observeUiState()
-        setupPlayerView()
         setupButtonClickListener()
     }
 
     private fun startUi() {
+        viewModel.currentId = ""
+        viewModel.lastPlayId = ""
         viewModel.navigationVideo(0)
     }
 
-    private fun setupPlayerView() {
-        youTubePlayerView = binding.youtubePlayerView
-    }
     private fun initYoutubePlayerView() {
+        val youTubePlayerView = binding.youtubePlayerView
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
@@ -56,7 +55,7 @@ class VideoPlayFragment : Fragment() {
                 Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show()
             }
             override fun onReady(youTubePlayer: YouTubePlayer) {
-                viewModel.youTubePlayer = youTubePlayer
+                this@VideoPlayFragment.youTubePlayer = youTubePlayer
                 youTubePlayer.cueVideo(viewModel.currentId,0F)
             }
         })
@@ -68,26 +67,25 @@ class VideoPlayFragment : Fragment() {
         }
         binding.imagePrev.setOnClickListener {
             viewModel.navigationVideo(-1)
-            binding.play = false
-            viewModel.youTubePlayer?.pause()
+            binding.isPlay = false
+            youTubePlayer?.pause()
         }
         binding.imageNext.setOnClickListener {
             viewModel.navigationVideo(1)
-            binding.play = false
-            viewModel.youTubePlayer?.pause()
+            binding.isPlay = false
+            youTubePlayer?.pause()
         }
         binding.imagePlay.setOnClickListener {
             if(viewModel.lastPlayId == viewModel.currentId) {
-                viewModel.youTubePlayer?.play()
+                youTubePlayer?.play()
             } else {
-                viewModel.youTubePlayer?.loadVideo(viewModel.currentId, 0F)
+                youTubePlayer?.loadVideo(viewModel.currentId, 0F)
                 viewModel.lastPlayId = viewModel.currentId
             }
-            binding.play = true
+            binding.isPlay = true
         }
         binding.imageStop.setOnClickListener {
-            val youTubePlayer = viewModel.youTubePlayer
-            binding.play = false
+            binding.isPlay = false
             youTubePlayer?.pause()
         }
     }
@@ -102,7 +100,7 @@ class VideoPlayFragment : Fragment() {
               state.data.apply {
                   binding.item = this
                   viewModel.currentId = this.videoId
-                  if( viewModel.youTubePlayer == null ) {
+                  if( youTubePlayer == null ) {
                       viewModel.lastPlayId = this.videoId
                       initYoutubePlayerView()
                   }
@@ -113,7 +111,7 @@ class VideoPlayFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.youTubePlayer = null
+        youTubePlayer = null
         _binding = null
     }
 

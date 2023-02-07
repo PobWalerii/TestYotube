@@ -22,6 +22,10 @@ import com.example.testyoutube.ui.videoplayscreen.VideoPlayViewModel
 import com.example.testyoutube.utils.*
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +38,7 @@ class VideoListFragment : Fragment() {
     private lateinit var verticalAdapter: VerticalListAdapter
     private lateinit var horisontalRecyclerView: RecyclerView
     private lateinit var verticalRecyclerView: RecyclerView
+    var youTubePlayer: YouTubePlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +70,8 @@ class VideoListFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun startUI() {
         binding.bottomBar.active = 1
+        playViewModel.currentId = ""
+        playViewModel.lastPlayId = ""
         if ( !viewModel.isStarted ) {
             val sPref =
                 requireActivity().getSharedPreferences("MyPref", AppCompatActivity.MODE_PRIVATE)
@@ -187,7 +194,7 @@ class VideoListFragment : Fragment() {
     private fun handleItemUiState(state: ItemUiState) {
         when (state) {
             is ExchangeItem -> {
-                state.data.let {
+                state.data.apply {
                     val current = viewModel.getCurrentVideo()
                     if(current!=null) {
                         miniPlayerSetItem(current)
@@ -223,12 +230,30 @@ class VideoListFragment : Fragment() {
     private fun setPlayerNavigationListener() {
         binding.miniPlayer.imageNext.setOnClickListener {
             playViewModel.navigationVideo(1)
+            binding.miniPlayer.isPlay = false
+            youTubePlayer?.pause()
         }
         binding.miniPlayer.imagePrev.setOnClickListener {
             playViewModel.navigationVideo(-1)
+            binding.miniPlayer.isPlay = false
+            youTubePlayer?.pause()
         }
         binding.miniPlayer.imagePlay.setOnClickListener {
-
+            val current = viewModel.getCurrentVideo()
+            if(current!=null) {
+                playViewModel.currentId = current.videoId
+                if (playViewModel.lastPlayId == playViewModel.currentId) {
+                    youTubePlayer?.play()
+                } else {
+                    youTubePlayer?.loadVideo(playViewModel.currentId, 0F)
+                    playViewModel.lastPlayId = playViewModel.currentId
+                }
+                binding.miniPlayer.isPlay = true
+            }
+        }
+        binding.miniPlayer.imageStop.setOnClickListener {
+            binding.miniPlayer.isPlay = false
+            youTubePlayer?.pause()
         }
     }
 
@@ -301,6 +326,14 @@ class VideoListFragment : Fragment() {
         binding.miniPlayer.image = current.imageUrl
         binding.miniPlayer.channel = current.channelTitle
         binding.miniPlayer.title = current.title
+        playViewModel.currentId= current.videoId
+        if( youTubePlayer == null ) {
+            playViewModel.lastPlayId = current.videoId
+            initYoutubePlayerView()
+        } else {
+            youTubePlayer?.pause()
+            binding.miniPlayer.isPlay = false
+        }
     }
 
     private fun saveSearhText(keyWord: String) {
@@ -310,8 +343,24 @@ class VideoListFragment : Fragment() {
         ed.apply()
     }
 
+    private fun initYoutubePlayerView() {
+        val youTubePlayerView = binding.miniPlayer.youtubePlayerView
+        lifecycle.addObserver(youTubePlayerView)
+        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
+                super.onError(youTubePlayer, error)
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show()
+            }
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                this@VideoListFragment.youTubePlayer = youTubePlayer
+                youTubePlayer.cueVideo(playViewModel.currentId,0F)
+            }
+        })
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        youTubePlayer = null
         _binding = null
     }
 

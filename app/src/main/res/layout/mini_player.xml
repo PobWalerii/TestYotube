@@ -53,6 +53,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
 
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtube_player_view"
+                android:layout_width="@dimen/mini_image_size"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/mini_image_padding"
+                android:layout_marginTop="@dimen/mini_image_padding"
+                android:layout_marginBottom="@dimen/mini_image_padding"
+                app:setVisible="@{isPlay &amp;&amp; !isAudio}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="@dimen/mini_image_size"
@@ -62,11 +74,12 @@
                 android:layout_marginBottom="@dimen/mini_image_padding"
                 app:imageMini='@{isAudio ? imageBitmap : image}'
                 app:imageAudio='@{isAudio}'
+                app:setVisible="@{isAudio || (!isAudio &amp;&amp; !isPlay)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
-            <!--app:imageMini='@{isAudio ? imageBitmap : image}'-->
+
             <TextView
                 android:id="@+id/textTitle"
                 android:layout_width="0dp"
