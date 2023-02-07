@@ -8,11 +8,8 @@
             name="item"
             type="com.example.testyoutube.data.database.entity.ItemVideo" />
         <variable
-            name="play"
+            name="isPlay"
             type="Boolean" />
-        <variable
-            name="idVideo"
-            type="Long" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,7 +67,7 @@
                 android:id="@+id/youtube_player_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                setVisible="@{play}"
+                setVisible="@{isPlay}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +83,7 @@
                 app:layout_constraintStart_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:loadImage='@{item}'
-                setVisible="@{!play}"
+                setVisible="@{!isPlay}"
                 tools:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -139,7 +136,7 @@
             android:layout_height="@dimen/video_fragment_control_size"
             android:layout_marginBottom="50dp"
             android:src="@drawable/pause"
-            app:setVisible="@{play}"
+            app:setVisible="@{isPlay}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +147,7 @@
             android:layout_width="@dimen/video_fragment_control_size"
             android:layout_height="@dimen/video_fragment_control_size"
             android:src="@drawable/play"
-            app:setVisible="@{!play}"
+            app:setVisible="@{!isPlay}"
             app:layout_constraintTop_toTopOf="@+id/image_stop"
             app:layout_constraintStart_toStartOf="@+id/image_stop"
             tools:ignore="ContentDescription" />

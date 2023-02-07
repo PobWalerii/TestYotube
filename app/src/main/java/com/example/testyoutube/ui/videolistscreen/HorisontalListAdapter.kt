@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
-import com.example.testyoutube.databinding.ChannelsListItemBinding
+import com.example.testyoutube.databinding.VideoTopListItemBinding
 
 class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHolder>() {
 
@@ -15,19 +15,21 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     private var listVideo: List<ItemVideo> = emptyList()
     private var currentId: Long = 0
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val binding = ChannelsListItemBinding.bind(itemView)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = VideoTopListItemBinding.bind(view)
 
         fun bind(item: ItemVideo, currentId: Long) {
             binding.item = item
             binding.current = currentId
         }
-        fun getBinding(): ChannelsListItemBinding = binding
+
+        fun getBinding(): VideoTopListItemBinding = binding
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.channels_list_item,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.video_top_list_item, parent, false)
         val holder = ViewHolder(view)
         val binding = holder.getBinding()
         binding.container.setOnClickListener {
@@ -37,7 +39,7 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun itemClick(position: Int, binding: ChannelsListItemBinding) {
+    fun itemClick(position: Int, binding: VideoTopListItemBinding) {
         val current = listVideo[position]
         currentId = current.id
         binding.current = currentId
@@ -48,6 +50,7 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
+
     interface OnItemClickListener {
         fun onItemClick(current: ItemVideo)
     }
@@ -57,12 +60,20 @@ class HorisontalListAdapter : RecyclerView.Adapter<HorisontalListAdapter.ViewHol
     }
 
     override fun getItemCount(): Int = listVideo.size
+
     override fun getItemId(position: Int): Long = listVideo[position].id
     fun getItemPosition(item: ItemVideo): Int = listVideo.indexOf(item)
 
+    fun setCurrentIdFromPosition(position: Int) {
+        currentId = listVideo[position].id
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: List<ItemVideo>) {
+    fun setList(list: List<ItemVideo>, nullId: Boolean = false) {
         listVideo = list
+        if(nullId) {
+            currentId = 0
+        }
         notifyDataSetChanged()
     }
 

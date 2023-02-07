@@ -2,6 +2,9 @@ package com.example.testyoutube.bindingadapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.view.View
 import android.view.View.*
@@ -12,9 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.testyoutube.R
+import com.example.testyoutube.bindingadapter.BindingAdapter.setFirstTitle
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
+
 
 object BindingAdapter {
 
@@ -28,14 +34,22 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("loadImageMini")
-    fun loadImageMini(imageView: ImageView, image: String?) {
-        if(image!=null) {
-            Glide.with(imageView.context).load(image)
-                .placeholder(R.drawable.square)
-                .centerCrop()
-                .into(imageView)
-        }
+    @BindingAdapter("imageMini","imageAudio")
+    fun ImageView.loadImageMini(imageMini: Any?, imageAudio: Boolean) {
+        Glide.with(this.context).load(imageMini)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .placeholder(if (imageAudio) R.drawable.audio else R.drawable.square)
+            .centerCrop()
+            .into(this)
+    }
+
+    @JvmStatic
+    @BindingAdapter("loadImageAudio")
+    fun loadImageAudio(imageView: ImageView, image: Any?) {
+        Glide.with(imageView.context).load(image)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .placeholder(R.drawable.audio)
+            .into(imageView)
     }
 
 
@@ -66,6 +80,8 @@ object BindingAdapter {
         this.text =
             if (firstLoad) {
                 this.context.getString(R.string.loading)
+            } else if(firstSize==0) {
+                "${firstText ?: ""} ${this.context.getString(R.string.empty_list)}"
             } else {
                 if (firstSize < COUNT_HORIZONTAL_ITEMS) {
                     "${this.context.getString(R.string.search_result)} ($firstSize) $firstText"
@@ -81,6 +97,8 @@ object BindingAdapter {
         this.text =
             if(secondLoad) {
                 this.context.getString(R.string.loading)
+            } else if(secondSize==0) {
+                "${secondText ?: ""} ${this.context.getString(R.string.empty_list)}"
             } else {
                 if (secondSize < COUNT_HORIZONTAL_ITEMS) {
                     "${this.context.getString(R.string.search_result)} ($secondSize) $secondText"
@@ -89,6 +107,7 @@ object BindingAdapter {
                 }
             }
     }
+
 
 }
 

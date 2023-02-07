@@ -18,21 +18,29 @@ class VideoListViewModel @Inject constructor(
     private val exchange: VideoExchange
 ) : ViewModel() {
 
-    private var _state: MutableLiveData<ListUiState> = MutableLiveData()
-    val state: LiveData<ListUiState> = _state
+    private var _stateList: MutableLiveData<ListUiState> = MutableLiveData()
+    val stateList: LiveData<ListUiState> = _stateList
 
     var keyWord = ""
+    var keyWordForSearh =""
     var isStarted = false
     var isBaseLoaded = false
+    var isApiLoaded = false
+    var isSearhResponse = false
 
     fun setCurrentVideo(item: ItemVideo) {
         exchange.setCurrentVideo(item)
     }
+    fun getCurrentVideo(): ItemVideo? = exchange.getCurrentVideo()
 
     fun getSizeVideoList() = exchange.getSizeList()
 
     fun setCurrentList(list: List<ItemVideo>) {
         exchange.setCurrentList(list)
+    }
+
+    fun getFirstFromCurrentList(): ItemVideo {
+        return exchange.getFirstFromCurrentList()
     }
 
     fun getVideoList(keyWord: String) {
@@ -54,16 +62,16 @@ class VideoListViewModel @Inject constructor(
     private fun handleResponse(resourse: ResponseState<List<ItemVideo>>) {
         when (resourse) {
             is ResponseState.Error -> {
-                _state.value = ListError(resourse.message)
+                _stateList.value = ListError(resourse.message)
             }
             is ResponseState.Loading -> {
-                _state.value = ListLoading(resourse.isLoading)
+                _stateList.value = ListLoading(resourse.isLoading)
             }
             is ResponseState.Success -> {
-                _state.value = ListLoaded(resourse.data ?: emptyList())
+                _stateList.value = ListLoaded(resourse.data ?: emptyList())
             }
             is ResponseState.Database -> {
-                _state.value = ListFromBase(resourse.data ?: emptyList())
+                _stateList.value = ListFromBase(resourse.data ?: emptyList())
             }
         }
     }

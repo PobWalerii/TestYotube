@@ -23,7 +23,6 @@ class VideoPlayViewModel @Inject constructor(
     val state: LiveData<ItemUiState> = _state
 
     var currentId: String = ""
-    var youTubePlayer: YouTubePlayer? = null
     var lastPlayId: String = ""
 
     fun navigationVideo(bias: Int) {

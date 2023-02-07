@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.R
 import com.example.testyoutube.data.database.entity.ItemVideo
-import com.example.testyoutube.databinding.ContentListItemBinding
+import com.example.testyoutube.databinding.VideoContentListItemBinding
 
 class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>() {
 
@@ -16,18 +16,18 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
     private var currentId: Long = 0
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val binding = ContentListItemBinding.bind(itemView)
+        private val binding = VideoContentListItemBinding.bind(itemView)
 
         fun bind(item: ItemVideo, currentId: Long) {
             binding.item = item
             binding.current = currentId
         }
-        fun getBinding(): ContentListItemBinding = binding
+        fun getBinding(): VideoContentListItemBinding = binding
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.content_list_item,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.video_content_list_item,parent,false)
         val holder = ViewHolder(view)
         val binding = holder.getBinding()
         binding.container.setOnClickListener {
@@ -37,7 +37,7 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun itemClick(position: Int, binding: ContentListItemBinding) {
+    fun itemClick(position: Int, binding: VideoContentListItemBinding) {
         val current = listVideo[position]
         currentId = current.id
         binding.current = currentId
@@ -59,12 +59,16 @@ class VerticalListAdapter : RecyclerView.Adapter<VerticalListAdapter.ViewHolder>
     override fun getItemCount(): Int = listVideo.size
     override fun getItemId(position: Int): Long = listVideo[position].id
     fun getItemPosition(item: ItemVideo?): Int = listVideo.indexOf(item)
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: List<ItemVideo>) {
-        listVideo = list
-        notifyDataSetChanged()
+    fun setCurrentIdFromPosition(position: Int) {
+        currentId = listVideo[position].id
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun setList(list: List<ItemVideo>, nullId: Boolean = false) {
+        listVideo = list
+        if(nullId) {
+            currentId = 0
+        }
+        notifyDataSetChanged()
+    }
 }

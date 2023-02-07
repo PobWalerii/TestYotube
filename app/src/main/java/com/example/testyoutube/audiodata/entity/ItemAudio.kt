@@ -1,9 +1,18 @@
 package com.example.testyoutube.audiodata.entity
 
+import android.graphics.Bitmap
+import android.net.Uri
 data class ItemAudio(
-    val id: Long,
-    val filePatch: String,
-    val fileName: String,
-    val album: String,
-    val artist: String
+    val name: String? = null,
+    val title: String? = null,
+    val musicId: Long = 0,
+    val musicUri: String? = null,
+    val filePath: String? = null,
+    val musicSize: Long = 0,
+    val album: String? = null,
+    val duration: Long = 0,
+    val art_uri: Uri? = null,
+    val artist: String? = null,
+    val composer: String? = null,
+    val image: Bitmap? = null
 )
