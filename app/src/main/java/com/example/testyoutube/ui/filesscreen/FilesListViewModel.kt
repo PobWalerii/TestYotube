@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.audiodata.exchange.AudioExchange
 import com.example.testyoutube.audiodata.repository.AudioRepository
-import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -42,6 +41,9 @@ class FilesListViewModel @Inject constructor(
             is AudioListState.Success -> {
                 _state.value = AudioLoaded(resourse.data ?: emptyList())
             }
+            is AudioListState.SearchFiles -> {
+                _state.value = AudioLoading(resourse.isSearch)
+            }
         }
     }
 
@@ -63,7 +65,7 @@ class FilesListViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentAudio(item: ItemAudio) {
+    fun setCurrentAudio(item: ItemAudio?) {
         exchange.setCurrentAudio(item)
     }
 
@@ -73,7 +75,10 @@ class FilesListViewModel @Inject constructor(
         exchange.setCurrentList(list)
     }
 
-    fun findItemForName(textSearch: String): ItemAudio? = exchange.findItemForName(textSearch)
+    fun getFullList(): List<ItemAudio> = exchange.getFullList()
 
+    fun setFullList(list: List<ItemAudio>) {
+        exchange.setFullList(list)
+    }
 
 }

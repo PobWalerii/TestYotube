@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testyoutube.audiodata.entity.ItemAudio
 import com.example.testyoutube.databinding.FragmentFilesScreenBinding
 import com.example.testyoutube.utils.*
+import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class FilesScreenFragment : Fragment() {
@@ -52,6 +54,7 @@ class FilesScreenFragment : Fragment() {
         setItemNavigationListener()
         observeListState()
         setListenersTextSearchChanged()
+        setOnSearchClickListener()
     }
 
     private fun observeListState() {
@@ -76,12 +79,18 @@ class FilesScreenFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun miniPlayerSetItem(current: ItemAudio) {
+    private fun miniPlayerSetItem(current: ItemAudio?) {
         with(binding.miniPlayer) {
-            image = current.art_uri.toString()
-            imageBitmap = current.image
-            channel = current.artist
-            title = current.title
+            if(current==null) {
+                imageBitmap = null
+                channel = ""
+                title = ""
+            } else {
+                //image = current.art_uri.toString()
+                imageBitmap = current.image
+                channel = current.artist
+                title = current.title
+            }
         }
     }
 
@@ -107,15 +116,17 @@ class FilesScreenFragment : Fragment() {
                 ).show()
             }
             is AudioLoaded -> {
-                state.data.apply {
-                    adapter.setList(this)
-                    if(this.isNotEmpty()) {
-                        exchangeCurrentItem(this[0])
-                        viewModel.setCurrentList(this)
-                    }
+                val list = state.data
+                adapter.setList(list)
+                if(list.isNotEmpty()) {
+                    exchangeCurrentItem(list[0])
+                    viewModel.setFullList(list)
                 }
             }
-         }
+            is AudioLoading -> {
+                binding.visibleProgress = state.isSearch
+            }
+        }
     }
 
     private fun startUI() {
@@ -130,11 +141,12 @@ class FilesScreenFragment : Fragment() {
                 pauseAudio()
                 viewModel.setCurrentAudio(current)
                 miniPlayerSetItem(current)
+                hideKeyboard()
             }
         })
     }
 
-    private fun exchangeCurrentItem(current: ItemAudio) {
+    private fun exchangeCurrentItem(current: ItemAudio?) {
         viewModel.setCurrentAudio(current)
         viewModel.navigationAudio(0)
     }
@@ -156,16 +168,20 @@ class FilesScreenFragment : Fragment() {
         binding.miniPlayer.imageNext.setOnClickListener {
             pauseAudio()
             viewModel.navigationAudio(1)
+            hideKeyboard()
         }
         binding.miniPlayer.imagePrev.setOnClickListener {
             pauseAudio()
             viewModel.navigationAudio(-1)
+            hideKeyboard()
         }
         binding.miniPlayer.imagePlay.setOnClickListener {
             playAudio(viewModel.getCurrentAudio())
+            hideKeyboard()
         }
         binding.miniPlayer.imageStop.setOnClickListener {
             pauseAudio()
+            hideKeyboard()
         }
     }
 
@@ -197,7 +213,7 @@ class FilesScreenFragment : Fragment() {
                     } else {
                         player?.setDataSource(audio.filePath)
                     }
-                    player?.setLooping(false)
+                    player?.isLooping = false
                     player?.prepare()
                     player?.start()
                 }
@@ -212,14 +228,40 @@ class FilesScreenFragment : Fragment() {
             definitionOfChange()
         }
     }
-    //https://www.geeksforgeeks.org/android-searchview-with-recyclerview-using-kotlin/
+
     private fun definitionOfChange() {
-        val textSearch = binding.appBarLayout.textSearch.text.toString()
-        val item: ItemAudio? = viewModel.findItemForName(textSearch)
-        if( item!=null ) {
-            val position = adapter.getItemPosition(item)
-            recyclerView.layoutManager?.scrollToPosition(position)
+        val textSearch = binding.appBarLayout.textSearch.text.toString().lowercase(Locale.ROOT)
+        val newList = viewModel.getFullList().filter { item ->
+            (item.title!=null && item.title.lowercase().contains(textSearch)) ||
+            (item.artist!=null && item.artist.lowercase().contains(textSearch))
         }
+        adapter.setList(newList)
+        viewModel.setCurrentList(newList)
+        val current: ItemAudio? =
+            if (newList.isNotEmpty()) {
+                newList[0]
+            } else {
+                null
+            }
+        viewModel.setCurrentAudio(current)
+        miniPlayerSetItem(current)
+        if(current != viewModel.currentPlayAudio) {
+            pauseAudio()
+        }
+    }
+
+    private fun setOnSearchClickListener() {
+        binding.appBarLayout.search.setOnClickListener {
+            hideKeyboard()
+        }
+        binding.appBarLayout.textSearch.setOnClickListener {
+            binding.appBarLayout.textSearch.setCursorVisible(true)
+        }
+    }
+
+    private fun hideKeyboard() {
+        hideKeyboardFromView(requireContext(),binding.appBarLayout.textSearch)
+        binding.appBarLayout.textSearch.setCursorVisible(false)
     }
 
 }

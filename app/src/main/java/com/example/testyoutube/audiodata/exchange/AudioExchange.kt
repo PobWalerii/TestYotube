@@ -1,26 +1,29 @@
 package com.example.testyoutube.audiodata.exchange
 
 import com.example.testyoutube.audiodata.entity.ItemAudio
-import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.ItemAudioState
-import com.example.testyoutube.utils.ItemState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class AudioExchange {
     private var currentItem: ItemAudio? = null
+    private var fullListAudio: List<ItemAudio> = emptyList()
     private var listAudio: List<ItemAudio> = emptyList()
 
-    fun setCurrentAudio(item: ItemAudio) {
+    fun setCurrentAudio(item: ItemAudio?) {
         currentItem = item
     }
-
     fun getCurrentAudio(): ItemAudio? = currentItem
 
     fun setCurrentList(list: List<ItemAudio>) {
         listAudio = list
     }
-    fun getSizeList() = listAudio.size
+
+    fun setFullList(list: List<ItemAudio>) {
+        fullListAudio = list
+        listAudio = list
+    }
+    fun getFullList(): List<ItemAudio> = fullListAudio
 
     fun navigationAudio(bias: Int): Flow<ItemAudioState<ItemAudio>> {
         return flow {
@@ -30,11 +33,6 @@ class AudioExchange {
             }
             emit(ItemAudioState.ExchangeCurrentItem(currentItem))
         }
-    }
-
-    fun findItemForName(textSearch: String): ItemAudio? {
-        val item: ItemAudio? = listAudio.find { audio -> audio.name?.substring(0,textSearch.length)?.toUpperCase() == textSearch.toUpperCase() }
-        return item
     }
 
 }

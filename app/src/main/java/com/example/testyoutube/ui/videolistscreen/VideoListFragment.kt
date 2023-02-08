@@ -25,7 +25,6 @@ import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -213,8 +212,12 @@ class VideoListFragment : Fragment() {
                 viewModel.keyWordForSearh = keyWord
                 viewModel.isSearhResponse = true
                 hideKeyboardFromView(textView.context, textView)
+                textView.setCursorVisible(false)
                 getVideoList(keyWord)
             }
+        }
+        binding.appBarLayout.textSearch.setOnClickListener {
+            binding.appBarLayout.textSearch.setCursorVisible(true)
         }
     }
 

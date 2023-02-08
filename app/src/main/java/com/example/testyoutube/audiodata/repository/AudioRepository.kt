@@ -21,12 +21,14 @@ class AudioRepository @Inject constructor(
 
     fun getAllAudioFromDevice(): Flow<AudioListState<List<ItemAudio>>> {
         return flow {
+            //emit(AudioListState.SearchFiles(true))
             try {
                 val list: List<ItemAudio> = responseAudio(context)
                 emit(AudioListState.Success(list))
             } catch (exception: Exception) {
                 emit(AudioListState.Error(exception.message ?: "Data loading error!"))
             }
+            //emit(AudioListState.SearchFiles(false))
         }
     }
 
