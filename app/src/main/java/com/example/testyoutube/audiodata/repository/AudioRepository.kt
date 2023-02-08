@@ -51,7 +51,7 @@ class AudioRepository @Inject constructor(
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.BUCKET_ID
         )
-        val cursor = context?.getContentResolver()?.query(
+        val cursor = context?.contentResolver?.query(
             uri,
             projections,
             selection,
@@ -76,11 +76,11 @@ class AudioRepository @Inject constructor(
                         val path: String = cursor.getString(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
                         )
-                        val album_id: Long = cursor.getLong(
+                        val albumId: Long = cursor.getLong(
                             cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
                         )
                         val sArtworkUri = Uri.parse("content://media/external/audio/albumart")
-                        val imageUri = Uri.withAppendedPath(sArtworkUri, album_id.toString())
+                        val imageUri = Uri.withAppendedPath(sArtworkUri, albumId.toString())
 
                         mmr.setDataSource(path)
                         val artBytes = mmr.embeddedPicture

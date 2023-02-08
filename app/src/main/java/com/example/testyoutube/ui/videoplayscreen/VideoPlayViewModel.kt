@@ -9,7 +9,6 @@ import com.example.testyoutube.data.exchange.VideoExchange
 import com.example.testyoutube.utils.ExchangeItem
 import com.example.testyoutube.utils.ItemState
 import com.example.testyoutube.utils.ItemUiState
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -2,9 +2,6 @@ package com.example.testyoutube.bindingadapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.view.View
 import android.view.View.*
@@ -17,7 +14,6 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.testyoutube.R
-import com.example.testyoutube.bindingadapter.BindingAdapter.setFirstTitle
 import com.example.testyoutube.data.database.entity.ItemVideo
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 
@@ -65,7 +61,7 @@ object BindingAdapter {
                 R.color.text_title_color
             })
         view.setTextColor(color)
-        view.setCompoundDrawableTintList(ColorStateList.valueOf(color))
+        view.compoundDrawableTintList = ColorStateList.valueOf(color)
     }
 
     @JvmStatic

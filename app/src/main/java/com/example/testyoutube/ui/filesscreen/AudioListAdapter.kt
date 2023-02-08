@@ -66,7 +66,11 @@ class AudioListAdapter : RecyclerView.Adapter<AudioListAdapter.ViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<ItemAudio>) {
         listAudio = list
-        currentId = if(list.size==0) 0 else list[0].musicId
+        currentId = if(list.isEmpty()) {
+            0
+        } else {
+            list[0].musicId
+        }
         notifyDataSetChanged()
     }
 

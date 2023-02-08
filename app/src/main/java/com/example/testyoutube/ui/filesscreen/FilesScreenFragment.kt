@@ -255,13 +255,13 @@ class FilesScreenFragment : Fragment() {
             hideKeyboard()
         }
         binding.appBarLayout.textSearch.setOnClickListener {
-            binding.appBarLayout.textSearch.setCursorVisible(true)
+            binding.appBarLayout.textSearch.isCursorVisible = true
         }
     }
 
     private fun hideKeyboard() {
         hideKeyboardFromView(requireContext(),binding.appBarLayout.textSearch)
-        binding.appBarLayout.textSearch.setCursorVisible(false)
+        binding.appBarLayout.textSearch.isCursorVisible =false
     }
 
 }

@@ -22,7 +22,6 @@ import com.example.testyoutube.ui.videoplayscreen.VideoPlayViewModel
 import com.example.testyoutube.utils.*
 import com.example.testyoutube.utils.Constants.COUNT_HORIZONTAL_ITEMS
 import com.example.testyoutube.utils.HideKeyboard.hideKeyboardFromView
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -88,7 +87,7 @@ class VideoListFragment : Fragment() {
                 binding.searchText = viewModel.keyWord
                 binding.responseSize = list.size
                 horisontalAdapter.setList(
-                    if(list.size==0) {
+                    if(list.isEmpty()) {
                         list
                     } else {
                         list.subList(0, COUNT_HORIZONTAL_ITEMS).toList()
@@ -194,11 +193,8 @@ class VideoListFragment : Fragment() {
         when (state) {
             is ExchangeItem -> {
                 state.data.apply {
-                    val current = viewModel.getCurrentVideo()
-                    if(current!=null) {
-                        miniPlayerSetItem(current)
-                        refreshRecyclers(current)
-                    }
+                    miniPlayerSetItem(this)
+                    refreshRecyclers(this)
                 }
             }
         }
@@ -212,12 +208,12 @@ class VideoListFragment : Fragment() {
                 viewModel.keyWordForSearh = keyWord
                 viewModel.isSearhResponse = true
                 hideKeyboardFromView(textView.context, textView)
-                textView.setCursorVisible(false)
+                textView.isCursorVisible = false
                 getVideoList(keyWord)
             }
         }
         binding.appBarLayout.textSearch.setOnClickListener {
-            binding.appBarLayout.textSearch.setCursorVisible(true)
+            binding.appBarLayout.textSearch.isCursorVisible = true
         }
     }
 
@@ -248,7 +244,7 @@ class VideoListFragment : Fragment() {
                 if (playViewModel.lastPlayId == playViewModel.currentId) {
                     youTubePlayer?.play()
                 } else {
-                    youTubePlayer?.loadVideo(playViewModel.currentId, 0F)
+                    youTubePlayer?.loadVideo(playViewModel.currentId.trim(), 0F)
                     playViewModel.lastPlayId = playViewModel.currentId
                 }
                 binding.miniPlayer.isPlay = true
@@ -357,19 +353,20 @@ class VideoListFragment : Fragment() {
         val youTubePlayerView = binding.miniPlayer.youtubePlayerView
         lifecycle.addObserver(youTubePlayerView)
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
-                super.onError(youTubePlayer, error)
-                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show()
-            }
+            //override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
+            //    super.onError(youTubePlayer, error)
+                //Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show()
+            //}
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 this@VideoListFragment.youTubePlayer = youTubePlayer
-                youTubePlayer.cueVideo(playViewModel.currentId,0F)
+                youTubePlayer.cueVideo(playViewModel.currentId.trim(), 0F)
             }
         })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        youTubePlayer?.pause()
         youTubePlayer = null
         _binding = null
     }
