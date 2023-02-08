@@ -22,6 +22,7 @@ class VideoRepository @Inject constructor(
                     Constants.API_PART,
                     Constants.API_PAGING_SIZE,
                     Constants.API_TYPE_CONTENT,
+                    Constants.CATEGORY_ID,
                     keyWord,
                     Constants.API_ORDER,
                     Constants.API_KEY

@@ -10,6 +10,7 @@ interface ApiService {
         @Query("part") part: String,
         @Query("maxResults") listSize: Int,
         @Query("type") type: String,
+        @Query("videoCategoryId") category: Int,
         @Query("q") keyWord: String,
         @Query("order") order: String,
         @Query("key") key: String
